@@ -7,6 +7,9 @@
 #include <frc/drive/MecanumDrive.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc/ADIS16470_IMU.h>
+#include <iostream>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "Robot.h"
 
 /**
  * This is a demo program showing how to use Mecanum control with the
@@ -21,6 +24,20 @@ public:
     // match your robot.
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
+
+  m_autoChooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
+  m_autoChooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+  m_yawChooser.SetDefaultOption(kYawDefault, kYawDefault);
+  m_yawChooser.AddOption(kYawXAxis, kYawXAxis);
+  m_yawChooser.AddOption(kYawYAxis, kYawYAxis);
+  frc::SmartDashboard::PutData("Auto Modes", &m_autoChooser);
+  frc::SmartDashboard::PutData("IMUYawAxis", &m_yawChooser);
+  frc::SmartDashboard::PutBoolean("RunCal", false);
+  frc::SmartDashboard::PutBoolean("ConfigCal", false);
+  frc::SmartDashboard::PutBoolean("Reset", false);
+  frc::SmartDashboard::PutBoolean("SetYawAxis", false);
+  frc::SmartDashboard::PutBoolean("SetDecRate", false);
+  frc::SmartDashboard::PutNumber("DecRate", m_decRate);
   }
 
   void TeleopPeriodic() override
