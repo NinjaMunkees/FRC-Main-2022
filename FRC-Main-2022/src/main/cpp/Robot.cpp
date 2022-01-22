@@ -6,28 +6,32 @@
 #include <frc/TimedRobot.h>
 #include <frc/drive/MecanumDrive.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
+#include <frc/ADIS16470_IMU.h>
 
 /**
  * This is a demo program showing how to use Mecanum control with the
  * MecanumDrive class.
  */
-class Robot : public frc::TimedRobot {
- public:
-  void RobotInit() override {
+class Robot : public frc::TimedRobot
+{
+public:
+  void RobotInit() override
+  {
     // Invert the right side motors. You may need to change or remove this to
     // match your robot.
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
   }
 
-  void TeleopPeriodic() override {
+  void TeleopPeriodic() override
+  {
     /* Use the joystick X axis for lateral movement, Y axis for forward
      * movement, and Z axis for rotation.
      */
     m_robotDrive.DriveCartesian(m_stick.GetX(), m_stick.GetY(), m_stick.GetZ());
   }
 
- private:
+private:
   static constexpr int kFrontLeftChannel = 0;
   static constexpr int kRearLeftChannel = 1;
   static constexpr int kFrontRightChannel = 2;
@@ -46,7 +50,8 @@ class Robot : public frc::TimedRobot {
 };
 
 #ifndef RUNNING_FRC_TESTS
-int main() {
+int main()
+{
   return frc::StartRobot<Robot>();
 }
 #endif
