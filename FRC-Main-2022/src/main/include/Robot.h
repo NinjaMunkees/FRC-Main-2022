@@ -17,6 +17,7 @@
 #include <frc/drive/MecanumDrive.h>
 #include <frc/drive/DifferentialDrive.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
+#include <frc/motorcontrol/Talon.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
 #include <ADIS16470_IMU.h>
 #include <iostream>
