@@ -11,7 +11,8 @@
 
 #include <frc/smartdashboard/SendableChooser.h>
 
-#include <frc/Joystick.h>
+//#include <frc/Joystick.h>
+#include <frc/XboxController.h>
 #include <frc/TimedRobot.h>
 #include <frc/drive/MecanumDrive.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -56,6 +57,10 @@ class Robot : public frc::TimedRobot {
   frc::MotorControllerGroup m_LeftMotor{m_FrontLeftMotor,m_RearLeftMotor};
   frc::MotorControllerGroup m_RightMotor{m_FrontRightMotor, m_RearRightMotor};
   frc::DifferentialDrive m_robotDrive{m_LeftMotor, m_RightMotor};
-  frc::Joystick m_leftStick{0};
-  frc::Joystick m_rightStick{1};
+  
+  frc::XboxController m_driverController{0};
+  
+  //frc::Joystick m_leftStick{0};
+  //frc::Joystick m_rightStick{1};
+
 };

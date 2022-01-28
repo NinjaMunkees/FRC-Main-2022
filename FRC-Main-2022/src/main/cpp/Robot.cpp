@@ -7,7 +7,10 @@
 
   void Robot::RobotInit()
   {
-
+    // We need to invert one side of the drivetrain so that positive voltages
+    // result in both sides moving forward. Depending on how your robot's
+    // gearbox is constructed, you might have to invert the left side instead.
+    m_RightMotor.SetInverted(true);
   }
 
   void Robot::RobotPeriodic()
@@ -27,8 +30,8 @@
 
   void Robot::TeleopPeriodic()
   {
-    // Drive with tank style
-    m_robotDrive.TankDrive(m_leftStick.GetY(), m_rightStick.GetY());
+    m_robotDrive.TankDrive(-m_driverController.GetLeftY(),
+                           -m_driverController.GetRightY());
   }
 
 #ifndef RUNNING_FRC_TESTS
