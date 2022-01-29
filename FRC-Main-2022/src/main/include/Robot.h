@@ -51,13 +51,15 @@ class Robot : public frc::TimedRobot {
   uint16_t m_decRate = 4;
   bool m_setDecRate = false;
   frc::ADIS16470_IMU::IMUAxis m_yawActiveAxis = frc::ADIS16470_IMU::IMUAxis::kZ;
-  frc::PWMSparkMax m_FrontLeftMotor{2};
-  frc::PWMSparkMax m_RearLeftMotor{3};
-  frc::PWMSparkMax m_FrontRightMotor{0};
-  frc::PWMSparkMax m_RearRightMotor{1};
-  frc::MotorControllerGroup m_LeftMotor{m_FrontLeftMotor,m_RearLeftMotor};
-  frc::MotorControllerGroup m_RightMotor{m_FrontRightMotor, m_RearRightMotor};
-  frc::DifferentialDrive m_robotDrive{m_LeftMotor, m_RightMotor};
+  frc::PWMSparkMax m_frontLeftMotor{2};
+  frc::PWMSparkMax m_rearLeftMotor{3};
+  frc::PWMSparkMax m_frontRightMotor{0};
+  frc::PWMSparkMax m_rearRightMotor{1};
+  //frc::PWMSparkMax m_TurretMain}{?}; need to assign id later
+  //frc::Talon m_ShooterMain{?}; need to assign id later
+  frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
+  frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
+  frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   
   frc::XboxController m_driverController{0};
   
