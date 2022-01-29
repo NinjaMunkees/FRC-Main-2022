@@ -21,6 +21,8 @@
 #include <ADIS16470_IMU.h>
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/Encoder.h>
+#include <frc/CAN.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -55,9 +57,11 @@ class Robot : public frc::TimedRobot {
   frc::PWMSparkMax m_frontRightMotor{0};
   frc::PWMSparkMax m_rearRightMotor{1};
   //frc::PWMSparkMax m_TurretMain}{?}; need to assign id later
-  //frc::Talon m_ShooterMain{?}; need to assign id later
+  //frc::Talon m_ShooterRight{?}; need to assign id later
+  //frc::Talon m_ShooterLeft{?}; need to assign id later
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
+  
 };
