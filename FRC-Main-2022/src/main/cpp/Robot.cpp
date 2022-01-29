@@ -15,7 +15,8 @@
 
   void Robot::RobotPeriodic()
   {
-     // Code that handles the adis 16470 imu raw data
+     // Code that handles the data from the adis 16470 IMU, 
+     // and outputs it to the driver-station
     frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle());
     frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle());
     frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle());
