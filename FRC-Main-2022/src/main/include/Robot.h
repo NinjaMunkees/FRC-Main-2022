@@ -18,7 +18,7 @@
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc/motorcontrol/Talon.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
-#include <ADIS16470_IMU.h>
+#include <frc/ADIS16470_IMU.h>
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Encoder.h>
@@ -35,23 +35,7 @@ class Robot : public frc::TimedRobot {
   //void TestPeriodic() override;
 
  private:
-  frc::SendableChooser<std::string> m_autoChooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
-  frc::ADIS16470_IMU m_imu{};
-  frc::SendableChooser<std::string> m_yawChooser;
-  const std::string kYawDefault = "Z-Axis";
-  const std::string kYawXAxis = "X-Axis";
-  const std::string kYawYAxis = "Y-Axis";
-  std::string m_yawSelected;
-  bool m_runCal = false;
-  bool m_configCal = false;
-  bool m_reset = false;
-  bool m_setYawAxis = false;
-  uint16_t m_decRate = 4;
-  bool m_setDecRate = false;
-  frc::ADIS16470_IMU::IMUAxis m_yawActiveAxis = frc::ADIS16470_IMU::IMUAxis::kZ;
+
   frc::PWMSparkMax m_frontLeftMotor{2};
   frc::PWMSparkMax m_rearLeftMotor{3};
   frc::PWMSparkMax m_frontRightMotor{0};

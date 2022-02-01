@@ -15,18 +15,7 @@
 
   void Robot::RobotPeriodic()
   {
-     // Code that handles the data from the adis 16470 IMU, 
-     // and outputs it to the driver-station
-    frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle());
-    frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle());
-    frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle());
-    m_setDecRate = frc::SmartDashboard::GetBoolean("SetDecRate", false);
-    m_decRate = frc::SmartDashboard::GetNumber("DecRate", 4);
-    m_runCal = frc::SmartDashboard::GetBoolean("RunCal", false);
-    m_configCal = frc::SmartDashboard::GetBoolean("ConfigCal", false);
-    m_reset = frc::SmartDashboard::GetBoolean("Reset", false);
-    m_setYawAxis = frc::SmartDashboard::GetBoolean("SetYawAxis", false);
-    m_yawSelected = m_yawChooser.GetSelected();
+     
   }
 
   void Robot::TeleopPeriodic()
