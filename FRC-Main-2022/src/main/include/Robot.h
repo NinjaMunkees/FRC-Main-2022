@@ -19,6 +19,7 @@
 #include <frc/motorcontrol/Talon.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
 #include <frc/ADIS16470_IMU.h>
+#include <rev/CANSparkMax.h>
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Encoder.h>
@@ -40,6 +41,7 @@ class Robot : public frc::TimedRobot {
   frc::PWMSparkMax m_rearLeftMotor{3};
   frc::PWMSparkMax m_frontRightMotor{0};
   frc::PWMSparkMax m_rearRightMotor{1};
+  //rev::CANSparkMax
   //frc::PWMSparkMax m_TurretMain}{?}; need to assign id later
   //frc::Talon m_ShooterRight{?}; need to assign id later
   //frc::Talon m_ShooterLeft{?}; need to assign id later
