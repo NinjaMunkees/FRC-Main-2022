@@ -35,7 +35,14 @@ class Robot : public frc::TimedRobot {
   void TeleopPeriodic() override;
   //void TestPeriodic() override;
 
+  //Robot task setup
+
+  
+  
+
  private:
+
+  //Drive-train
 
   frc::PWMSparkMax m_frontLeftMotor{2};
   frc::PWMSparkMax m_rearLeftMotor{3};
