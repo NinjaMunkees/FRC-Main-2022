@@ -48,9 +48,6 @@ class Robot : public frc::TimedRobot {
 
   //Robot task setup
 
-  
-  
-
  private:
 
   //Drive-train
