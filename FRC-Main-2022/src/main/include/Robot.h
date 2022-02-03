@@ -10,20 +10,31 @@
 #include <string>
 
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include <frc/TimedRobot.h>
+#include <frc/drive/DifferentialDrive.h>
+#include <iostream>
+
+#include <cmath>
+#include <frc/AnalogGyro.h>
+
+#include <frc/CAN.h>
+#include <frc/Encoder.h>
+
+#include "rev/ColorSensorV3.h"
+
+#include <cstdio>
+#include "cameraserver/CameraServer.h"
 
 #include <frc/XboxController.h>
-#include <frc/TimedRobot.h>
-#include <frc/drive/MecanumDrive.h>
-#include <frc/drive/DifferentialDrive.h>
-#include <frc/motorcontrol/PWMSparkMax.h>
-#include <frc/motorcontrol/Talon.h>
-#include <frc/motorcontrol/MotorControllerGroup.h>
-#include <frc/ADIS16470_IMU.h>
+#include <frc/Joystick.h>
+
 #include <rev/CANSparkMax.h>
-#include <iostream>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Encoder.h>
-#include <frc/CAN.h>
+#include <frc/motorcontrol/Talon.h>
+#include <frc/motorcontrol/PWMSparkMax.h>
+#include <frc/motorcontrol/MotorControllerGroup.h>
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -31,7 +42,7 @@ class Robot : public frc::TimedRobot {
   void RobotPeriodic() override;
   //void AutonomousInit() override;
   //void AutonomousPeriodic() override;
-  //void TeleopInit() override;
+  //void TeleopInit() override;      
   void TeleopPeriodic() override;
   //void TestPeriodic() override;
 
@@ -56,5 +67,5 @@ class Robot : public frc::TimedRobot {
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
-  
+
 };

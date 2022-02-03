@@ -11,6 +11,15 @@
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     m_leftMotor.SetInverted(true);
+
+    //Code that sends videoioutput from a webcam to the driver station
+
+    #if defined(__linux__) || defined(_WIN32)
+    frc::CameraServer::StartAutomaticCapture();
+  #else
+    std::fputs("Vision only available on Linux or Windows.\n", stderr);
+    std::fflush(stderr);
+  #endif
   }
 
   void Robot::RobotPeriodic()
