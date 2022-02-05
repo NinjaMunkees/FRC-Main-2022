@@ -41,10 +41,14 @@
     //m_driverController.GetAButtonPressed();
   }
 
+  void Robot::TeleopInit(){
+  
+  }
+  
   void Robot::TeleopPeriodic()
   {
-    m_robotDrive.TankDrive(-m_driverController.GetLeftY(),
-                           -m_driverController.GetRightY());
+    m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,
+                           -m_driverController.GetRightY()*0.85);
   }
 
 #ifndef RUNNING_FRC_TESTS
