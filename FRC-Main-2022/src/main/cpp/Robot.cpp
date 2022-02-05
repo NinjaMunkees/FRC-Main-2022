@@ -14,9 +14,9 @@
 
     //Gyro
 
-    frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle());
-    frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle());
-    frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle());
+    frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle().value());
+    frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle().value());
+    frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle().value());
     m_setDecRate = frc::SmartDashboard::GetBoolean("SetDecRate", false);
     m_decRate = frc::SmartDashboard::GetNumber("DecRate", 4);
     m_runCal = frc::SmartDashboard::GetBoolean("RunCal", false);
