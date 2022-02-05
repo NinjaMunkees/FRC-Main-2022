@@ -8,28 +8,39 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
-#include <frc/smartdashboard/SendableChooser.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include <frc/TimedRobot.h>
 #include <frc/drive/DifferentialDrive.h>
-#include <iostream>
 
+//Gyro
 #include <cmath>
 #include <frc/AnalogGyro.h>
 
-#include <frc/CAN.h>
-#include <frc/Encoder.h>
-
+//Color Sensor
 #include "rev/ColorSensorV3.h"
 
+//Basic Vision
 #include <cstdio>
 #include "cameraserver/CameraServer.h"
 
-#include <frc/XboxController.h>
-#include <frc/Joystick.h>
+//Limelight
+#include "wpi/span.h"
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableEntry.h"
+#include "networktables/NetworkTableValue.h"
+#include "networktables/NetworkTableInstance.h"
 
+//Controllers
+#include <frc/Joystick.h>
+#include <frc/XboxController.h>
+
+//Motor controllers, CAN, and encoder
+#include <frc/CAN.h>
+#include <frc/Encoder.h>
 #include <rev/CANSparkMax.h>
 #include <frc/motorcontrol/Talon.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
