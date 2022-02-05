@@ -18,7 +18,7 @@
 
 //Gyro
 #include <cmath>
-#include <frc/AnalogGyro.h>
+#include <frc/ADIS16470_IMU.h>
 
 //Color Sensor
 #include "rev/ColorSensorV3.h"
@@ -75,5 +75,25 @@ class Robot : public frc::TimedRobot {
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
+
+  //Gyro
+
+  frc::SendableChooser<std::string> m_autoChooser;
+  const std::string kAutoNameDefault = "Default";
+  const std::string kAutoNameCustom = "My Auto";
+  std::string m_autoSelected;
+  frc::ADIS16470_IMU m_imu{};
+  frc::SendableChooser<std::string> m_yawChooser;
+  const std::string kYawDefault = "Z-Axis";
+  const std::string kYawXAxis = "X-Axis";
+  const std::string kYawYAxis = "Y-Axis";
+  std::string m_yawSelected;
+  bool m_runCal = false;
+  bool m_configCal = false;
+  bool m_reset = false;
+  bool m_setYawAxis = false;
+  uint16_t m_decRate = 4;
+  bool m_setDecRate = false;
+  frc::ADIS16470_IMU::IMUAxis m_yawActiveAxis = frc::ADIS16470_IMU::IMUAxis::kZ;
 
 };
