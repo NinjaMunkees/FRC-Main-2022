@@ -67,7 +67,7 @@ class Robot : public frc::TimedRobot {
   frc::PWMSparkMax m_rearLeftMotor{3};
   frc::PWMSparkMax m_frontRightMotor{0};
   frc::PWMSparkMax m_rearRightMotor{1};
-  //rev::CANSparkMax
+  rev::CANSparkMax m_youSpinMeRightRound{7, rev::CANSparkMax::MotorType::kBrushless};
   //frc::PWMSparkMax m_TurretMain}{?}; need to assign id later
   //frc::Talon m_ShooterRight{?}; need to assign id later
   //frc::Talon m_ShooterLeft{?}; need to assign id later

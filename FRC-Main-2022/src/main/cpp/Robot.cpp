@@ -38,7 +38,6 @@
   void Robot::RobotPeriodic()
   {
 
-    //m_driverController.GetAButtonPressed();
   }
 
   void Robot::TeleopInit(){
@@ -47,8 +46,19 @@
   
   void Robot::TeleopPeriodic()
   {
-    m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,
-                           -m_driverController.GetRightY()*0.85);
+
+    double BumperSpeed = 0.05;
+    bool LeftBumper = m_driverController.GetLeftBumper();
+    bool RightBumper = m_driverController.GetRightBumper();
+
+    double TurretSpeed = -1 * BumperSpeed * LeftBumper + RightBumper * BumperSpeed;
+
+    m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,-m_driverController.GetRightY()*0.85);
+
+    m_youSpinMeRightRound.Set(TurretSpeed);
+
+    //frc::SmartDashboard::PutNumber("m_youSpinMeRightRound",LeftBumper);
+
   }
 
 #ifndef RUNNING_FRC_TESTS
