@@ -47,6 +47,8 @@
   void Robot::TeleopPeriodic()
   {
 
+    //Turret Code
+
     double BumperSpeed = 0.05;
     bool LeftBumper = m_driverController.GetLeftBumper();
     bool RightBumper = m_driverController.GetRightBumper();
@@ -58,6 +60,10 @@
     m_youSpinMeRightRound.Set(TurretSpeed);
 
     //frc::SmartDashboard::PutNumber("m_youSpinMeRightRound",LeftBumper);
+
+    //ColorSensorV3 Code
+
+    double IR = m_colorSensor.GetIR();
 
   }
 
