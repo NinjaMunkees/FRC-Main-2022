@@ -21,6 +21,8 @@
 #include <frc/ADIS16470_IMU.h>
 
 //Color Sensor
+#include <frc/util/Color.h>
+#include "rev/ColorMatch.h"
 #include "rev/ColorSensorV3.h"
 
 //Basic Vision
@@ -58,6 +60,16 @@ class Robot : public frc::TimedRobot {
   //void TestPeriodic() override;
 
   //Robot task setup
+
+  //ColorSensorV3
+
+  static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
+
+  rev::ColorSensorV3 m_colorSensor{i2cPort};
+  frc::Color detectedColor = m_colorSensor.GetColor();
+  double IR = m_colorSensor.GetIR();
+  uint32_t proximity = m_colorSensor.GetProximity();
+  rev::ColorMatch m_colorMatcher;
 
  private:
 
