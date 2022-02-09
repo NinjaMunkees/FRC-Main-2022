@@ -27,11 +27,6 @@
 
     //ColorSensorV3
 
-    frc::SmartDashboard::PutNumber("Red", detectedColor.red);
-    frc::SmartDashboard::PutNumber("Green", detectedColor.green);
-    frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
-    frc::SmartDashboard::PutNumber("IR", IR);
-    frc::SmartDashboard::PutNumber("Proximity", proximity);
 
     //Code that sends videoioutput from a webcam to the driver station
 
@@ -45,7 +40,15 @@
 
   void Robot::RobotPeriodic()
   {
+    frc::Color detectedColor = m_colorSensor.GetColor();
+    double IR = m_colorSensor.GetIR();
+    uint32_t proximity = m_colorSensor.GetProximity();
 
+    frc::SmartDashboard::PutNumber("Red", detectedColor.red);
+    frc::SmartDashboard::PutNumber("Green", detectedColor.green);
+    frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
+    frc::SmartDashboard::PutNumber("IR", IR);
+    frc::SmartDashboard::PutNumber("Proximity", proximity);
   }
 
   void Robot::TeleopInit(){
