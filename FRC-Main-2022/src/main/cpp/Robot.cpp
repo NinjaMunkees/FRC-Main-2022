@@ -25,6 +25,14 @@
     m_setYawAxis = frc::SmartDashboard::GetBoolean("SetYawAxis", false);
     m_yawSelected = m_yawChooser.GetSelected();
 
+    //ColorSensorV3
+
+    frc::SmartDashboard::PutNumber("Red", detectedColor.red);
+    frc::SmartDashboard::PutNumber("Green", detectedColor.green);
+    frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
+    frc::SmartDashboard::PutNumber("IR", IR);
+    frc::SmartDashboard::PutNumber("Proximity", proximity);
+
     //Code that sends videoioutput from a webcam to the driver station
 
     #if defined(__linux__) || defined(_WIN32)
@@ -57,13 +65,11 @@
 
     m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,-m_driverController.GetRightY()*0.85);
 
-    m_youSpinMeRightRound.Set(TurretSpeed);
+    m_turretMotor.Set(TurretSpeed);
 
-    //frc::SmartDashboard::PutNumber("m_youSpinMeRightRound",LeftBumper);
+    //frc::SmartDashboard::PutNumber("m_turretMotor",LeftBumper);
 
     //ColorSensorV3 Code
-
-    double IR = m_colorSensor.GetIR();
 
   }
 

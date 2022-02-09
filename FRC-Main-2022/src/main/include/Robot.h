@@ -67,7 +67,7 @@ class Robot : public frc::TimedRobot {
   frc::PWMSparkMax m_rearLeftMotor{3};
   frc::PWMSparkMax m_frontRightMotor{0};
   frc::PWMSparkMax m_rearRightMotor{1};
-  rev::CANSparkMax m_youSpinMeRightRound{7, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
   //frc::PWMSparkMax m_TurretMain}{?}; need to assign id later
   //frc::Talon m_ShooterRight{?}; need to assign id later
   //frc::Talon m_ShooterLeft{?}; need to assign id later
@@ -101,5 +101,8 @@ class Robot : public frc::TimedRobot {
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
 
   rev::ColorSensorV3 m_colorSensor{i2cPort};
+  frc::Color detectedColor = m_colorSensor.GetColor();
+  double IR = m_colorSensor.GetIR();
+  uint32_t proximity = m_colorSensor.GetProximity();
 
 };
