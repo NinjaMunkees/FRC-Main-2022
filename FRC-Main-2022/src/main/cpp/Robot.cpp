@@ -45,6 +45,8 @@
     frc::Color detectedColor = m_colorSensor.GetColor();
     double IR = m_colorSensor.GetIR();
     uint32_t proximity = m_colorSensor.GetProximity();
+    
+    frc::DriverStation::GetAlliance;   //Found it!
 
     frc::SmartDashboard::PutNumber("Red", detectedColor.red);
     frc::SmartDashboard::PutNumber("Green", detectedColor.green);
