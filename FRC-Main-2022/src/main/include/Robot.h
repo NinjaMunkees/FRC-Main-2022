@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 
+#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
 

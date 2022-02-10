@@ -40,6 +40,8 @@
 
   void Robot::RobotPeriodic()
   {
+    //ColorSensorV3
+
     frc::Color detectedColor = m_colorSensor.GetColor();
     double IR = m_colorSensor.GetIR();
     uint32_t proximity = m_colorSensor.GetProximity();
