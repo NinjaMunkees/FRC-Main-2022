@@ -12,21 +12,22 @@
     // gearbox is constructed, you might have to invert the left side instead.
     m_leftMotor.SetInverted(true);
 
-    //Gyro
-
-    frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle().value());
-    frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle().value());
-    frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle().value());
-    m_setDecRate = frc::SmartDashboard::GetBoolean("SetDecRate", false);
-    m_decRate = frc::SmartDashboard::GetNumber("DecRate", 4);
-    m_runCal = frc::SmartDashboard::GetBoolean("RunCal", false);
-    m_configCal = frc::SmartDashboard::GetBoolean("ConfigCal", false);
-    m_reset = frc::SmartDashboard::GetBoolean("Reset", false);
-    m_setYawAxis = frc::SmartDashboard::GetBoolean("SetYawAxis", false);
-    m_yawSelected = m_yawChooser.GetSelected();
-
     //ColorSensorV3
 
+    AllianceColor = frc::DriverStation::GetAlliance();
+    switch (AllianceColor)
+    {
+      case frc::DriverStation::Alliance::kBlue:
+           frc::SmartDashboard::PutString("AllianceColor", "Blue");
+           break;
+      case frc::DriverStation::Alliance::kRed:
+           frc::SmartDashboard::PutString("AllianceColor", "Red");
+           break;
+      case frc::DriverStation::Alliance::kInvalid:
+           frc::SmartDashboard::PutString("AllianceColor", "?");
+           break;
+      
+    }
 
     //Code that sends videoioutput from a webcam to the driver station
 
@@ -40,19 +41,32 @@
 
   void Robot::RobotPeriodic()
   {
+
+    //Gyro
+
+    frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle().value());
+    frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle().value());
+    frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle().value());
+    m_setDecRate = frc::SmartDashboard::GetBoolean("SetDecRate", false);
+    m_decRate = frc::SmartDashboard::GetNumber("DecRate", 4);
+    m_runCal = frc::SmartDashboard::GetBoolean("RunCal", false);
+    m_configCal = frc::SmartDashboard::GetBoolean("ConfigCal", false);
+    m_reset = frc::SmartDashboard::GetBoolean("Reset", false);
+    m_setYawAxis = frc::SmartDashboard::GetBoolean("SetYawAxis", false);
+    m_yawSelected = m_yawChooser.GetSelected();
+    
     //ColorSensorV3
 
     frc::Color detectedColor = m_colorSensor.GetColor();
     double IR = m_colorSensor.GetIR();
     uint32_t proximity = m_colorSensor.GetProximity();
-    
-    frc::DriverStation::GetAlliance;   //Found it!
 
-    frc::SmartDashboard::PutNumber("Red", detectedColor.red);
-    frc::SmartDashboard::PutNumber("Green", detectedColor.green);
-    frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
-    frc::SmartDashboard::PutNumber("IR", IR);
-    frc::SmartDashboard::PutNumber("Proximity", proximity);
+    frc::SmartDashboard::PutNumber("ColorSensor.Color...Red", detectedColor.red);
+    frc::SmartDashboard::PutNumber("ColorSensor.Color..Green", detectedColor.green);
+    frc::SmartDashboard::PutNumber("ColorSensor.Color.Blue", detectedColor.blue);
+    frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
+    frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
+    //frc::SmartDashboard
   }
 
   void Robot::TeleopInit(){
@@ -72,7 +86,12 @@
 
     m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,-m_driverController.GetRightY()*0.85);
 
-    m_turretMotor.Set(TurretSpeed);
+    //m_turretMotor.Set(TurretSpeed);
+
+    //m_ShooterLeft.(.05);
+    //m_ShooterLeft.Set(ControlMode::Velocity, shooterTargetSpeed);
+
+
 
     //frc::SmartDashboard::PutNumber("m_turretMotor",LeftBumper);
 

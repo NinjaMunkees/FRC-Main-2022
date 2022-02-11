@@ -68,12 +68,19 @@ class Robot : public frc::TimedRobot {
   frc::PWMSparkMax m_rearLeftMotor{3};
   frc::PWMSparkMax m_frontRightMotor{0};
   frc::PWMSparkMax m_rearRightMotor{1};
-  rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
-  //frc::PWMSparkMax m_TurretMain}{?}; need to assign id later
-  //frc::Talon m_ShooterRight{?}; need to assign id later
-  //frc::Talon m_ShooterLeft{?}; need to assign id later
+  //rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_frontRight{1, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_backRight{2, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_frontLeft{3, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_backLeft{4, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_climberMain{9, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
+  frc::Talon m_ShooterRight{5}; //need to assign id later
+  frc::Talon m_ShooterLeft{6}; //need to assign id later
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
+  frc::MotorControllerGroup m_ShooterGroup{m_ShooterRight, m_ShooterLeft};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
 
@@ -102,5 +109,8 @@ class Robot : public frc::TimedRobot {
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
 
   rev::ColorSensorV3 m_colorSensor{i2cPort};
+  frc::DriverStation::Alliance AllianceColor;
+
+  enum BallColor{};
 
 };
