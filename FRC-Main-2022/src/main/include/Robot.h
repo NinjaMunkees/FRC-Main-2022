@@ -74,7 +74,7 @@ class Robot : public frc::TimedRobot {
   //rev::CANSparkMax m_backRight{2, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_frontLeft{3, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_backLeft{4, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_climberMain{9, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
@@ -87,9 +87,9 @@ class Robot : public frc::TimedRobot {
 
   //Shooter
   
-  int shooterTargetSpeed = 100;
-  int shooterSlowSpeed = 50;
-  int shooterStop = 0;
+  double shooterTargetSpeed = 69;
+  double shooterSlowSpeed = 42;
+  //double shooterStop = 0;
 
   //Gyro
 

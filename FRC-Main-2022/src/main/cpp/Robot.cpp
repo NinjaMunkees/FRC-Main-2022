@@ -96,20 +96,48 @@
     //m_ShooterLeft.Set(ControlMode::Velocity, shooterTargetSpeed);
 
     //Shooter Code 
-    
+
+      frc::SmartDashboard::PutBoolean("AButtonPress", m_driverController.GetAButtonPressed());
+      frc::SmartDashboard::PutBoolean("AButtonRelease", m_driverController.GetAButtonReleased());
+      frc::SmartDashboard::PutBoolean("AButton", m_driverController.GetAButton());
+      frc::SmartDashboard::PutBoolean("XButton", m_driverController.GetXButton());
+
       if(m_driverController.GetAButton()){
         m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed); 
-        m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+        //m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
       }
-      else if(m_driverController.GetBButton()){
+      //if(m_driverController.GetXButton()){
+      else {  
+        m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
+        //m_ShooterRight->Set(ControlMode::PercentOutput, 0); 
+      }
+      /*
+      if(m_driverController.GetAButtonReleased()){
+        m_ShooterLeft->Set(ControlMode::Velocity, shooterStop);
+      }
+      
+      if(m_driverController.GetBButton()){
         m_ShooterLeft->Set(ControlMode::Velocity, shooterSlowSpeed); 
-        m_ShooterRight->Set(ControlMode::Velocity, shooterSlowSpeed * -1);
+        //m_ShooterRight->Set(ControlMode::Velocity, shooterSlowSpeed * -1);
       }
-      else if(m_driverController.GetXButton()){
+      if(m_driverController.GetXButton()){
         m_ShooterLeft->Set(ControlMode::Velocity, shooterStop); 
-        m_ShooterRight->Set(ControlMode::Velocity, shooterStop * -1);
+        //m_ShooterRight->Set(ControlMode::Velocity, shooterStop * -1);
       }
+     */
 
+    // Intake code
+
+      if(m_driverController.GetYButtonPressed()){
+        m_intake.Set(0.05);
+      }
+      else if(m_driverController.GetBButtonPressed()){
+        m_intake.Set(0.05 * -1);
+      }
+      else if(m_driverController.GetYButton() && m_driverController.GetBButton()){
+        m_intake.Set(0.0);
+      }
+      
     //frc::SmartDashboard::PutNumber("m_turretMotor",LeftBumper);
 
     //ColorSensorV3 Code
@@ -122,6 +150,7 @@ Robot::~Robot(){
  delete m_ShooterLeft;
  delete m_ShooterRight;
 }
+
 
 #ifndef RUNNING_FRC_TESTS
 int main()
