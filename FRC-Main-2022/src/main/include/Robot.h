@@ -69,27 +69,25 @@ class Robot : public frc::TimedRobot {
   frc::PWMSparkMax m_rearLeftMotor{3};
   frc::PWMSparkMax m_frontRightMotor{0};
   frc::PWMSparkMax m_rearRightMotor{1};
-  //rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_frontRight{1, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_backRight{2, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_frontLeft{3, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_backLeft{4, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_climberMain{9, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_climberMain{9, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_climberWinch{10, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
   TalonFX * m_ShooterRight;
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
-  //frc::MotorControllerGroup m_ShooterGroup{m_ShooterRight, m_ShooterLeft};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
 
   //Shooter
   
-  double shooterTargetSpeed = 69;
-  double shooterSlowSpeed = 42;
-  //double shooterStop = 0;
+  double shooterTargetSpeed = 10;
+  double shooterSlowSpeed = 5;
 
   //Gyro
 

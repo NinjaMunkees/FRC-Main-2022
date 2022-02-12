@@ -70,7 +70,6 @@
     frc::SmartDashboard::PutNumber("ColorSensor.Color.Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
-    //frc::SmartDashboard
   }
 
   void Robot::TeleopInit(){
@@ -82,18 +81,15 @@
 
     //Turret Code
 
-    double BumperSpeed = 0.05;
-    bool LeftBumper = m_driverController.GetLeftBumper();
-    bool RightBumper = m_driverController.GetRightBumper();
+    double TriggerSpeed = 0.05;
+    double LeftTrigger = m_driverController.GetLeftTriggerAxis();
+    double RightTrigger = m_driverController.GetRightTriggerAxis();
 
-    double TurretSpeed = -1 * BumperSpeed * LeftBumper + RightBumper * BumperSpeed;
+    double TurretSpeed = -1 * TriggerSpeed * LeftTrigger + RightTrigger * TriggerSpeed;
+
+     m_turretMotor.Set(TurretSpeed);
 
     m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,-m_driverController.GetRightY()*0.85);
-
-    //m_turretMotor.Set(TurretSpeed);
-
-    //m_ShooterLeft.(.05);
-    //m_ShooterLeft.Set(ControlMode::Velocity, shooterTargetSpeed);
 
     //Shooter Code 
 
@@ -104,41 +100,43 @@
 
       if(m_driverController.GetAButton()){
         m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed); 
-        //m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+        m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
       }
-      //if(m_driverController.GetXButton()){
       else {  
         m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
-        //m_ShooterRight->Set(ControlMode::PercentOutput, 0); 
+        m_ShooterRight->Set(ControlMode::PercentOutput, 0); 
       }
-      /*
-      if(m_driverController.GetAButtonReleased()){
-        m_ShooterLeft->Set(ControlMode::Velocity, shooterStop);
-      }
-      
-      if(m_driverController.GetBButton()){
-        m_ShooterLeft->Set(ControlMode::Velocity, shooterSlowSpeed); 
-        //m_ShooterRight->Set(ControlMode::Velocity, shooterSlowSpeed * -1);
-      }
-      if(m_driverController.GetXButton()){
-        m_ShooterLeft->Set(ControlMode::Velocity, shooterStop); 
-        //m_ShooterRight->Set(ControlMode::Velocity, shooterStop * -1);
-      }
-     */
 
     // Intake code
 
       if(m_driverController.GetYButtonPressed()){
         m_intake.Set(0.05);
       }
-      else if(m_driverController.GetBButtonPressed()){
+      else if(m_driverController.GetYButtonPressed() && m_driverController.GetLeftBumper()){
         m_intake.Set(0.05 * -1);
       }
-      else if(m_driverController.GetYButton() && m_driverController.GetBButton()){
+      else if(m_driverController.GetYButton() && m_driverController.GetRightBumper()){
         m_intake.Set(0.0);
       }
       
-    //frc::SmartDashboard::PutNumber("m_turretMotor",LeftBumper);
+    // Climber winch code
+
+      if(m_driverController.GetBButton() && m_driverController.GetLeftBumper()){
+        m_climberWinch.Set(0.005);
+      }
+      else if(m_driverController.GetBButton() && m_driverController.GetRightBumper()){
+        m_climberWinch.Set(-0.005);
+      }
+      else{
+        m_climberWinch.Set(0.0);
+      }
+    
+    // Climber grip code
+      /*
+      if(m_driverController.GetXButton() && m_driverController.GetLeftBumper()){
+        m_
+      }
+      */
 
     //ColorSensorV3 Code
 
