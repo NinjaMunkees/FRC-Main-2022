@@ -7,10 +7,14 @@
 
   void Robot::RobotInit()
   {
+    // Assigning Falcons
+    m_ShooterLeft = new TalonFX(6);
+    m_ShooterRight = new TalonFX(5);
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     m_leftMotor.SetInverted(true);
+    //m_ShooterLeft->SetInverted(true);
 
     //ColorSensorV3
 
@@ -91,13 +95,33 @@
     //m_ShooterLeft.(.05);
     //m_ShooterLeft.Set(ControlMode::Velocity, shooterTargetSpeed);
 
-
+    //Shooter Code 
+    
+      if(m_driverController.GetAButton()){
+        m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed); 
+        m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+      }
+      else if(m_driverController.GetBButton()){
+        m_ShooterLeft->Set(ControlMode::Velocity, shooterSlowSpeed); 
+        m_ShooterRight->Set(ControlMode::Velocity, shooterSlowSpeed * -1);
+      }
+      else if(m_driverController.GetXButton()){
+        m_ShooterLeft->Set(ControlMode::Velocity, shooterStop); 
+        m_ShooterRight->Set(ControlMode::Velocity, shooterStop * -1);
+      }
 
     //frc::SmartDashboard::PutNumber("m_turretMotor",LeftBumper);
 
     //ColorSensorV3 Code
 
   }
+
+//Destructor (Cleans up stuff)
+
+Robot::~Robot(){
+ delete m_ShooterLeft;
+ delete m_ShooterRight;
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main()

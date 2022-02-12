@@ -42,8 +42,8 @@
 //Motor controllers, CAN, and encoder
 #include <frc/CAN.h>
 #include <frc/Encoder.h>
+#include "ctre/Phoenix.h"
 #include <rev/CANSparkMax.h>
-#include <frc/motorcontrol/Talon.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
 
@@ -57,6 +57,7 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;      
   void TeleopPeriodic() override;
   //void TestPeriodic() override;
+  ~Robot();
 
   //Robot task setup
 
@@ -76,13 +77,19 @@ class Robot : public frc::TimedRobot {
   //rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_climberMain{9, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
-  frc::Talon m_ShooterRight{5}; //need to assign id later
-  frc::Talon m_ShooterLeft{6}; //need to assign id later
+  TalonFX * m_ShooterLeft;
+  TalonFX * m_ShooterRight;
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
-  frc::MotorControllerGroup m_ShooterGroup{m_ShooterRight, m_ShooterLeft};
+  //frc::MotorControllerGroup m_ShooterGroup{m_ShooterRight, m_ShooterLeft};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
+
+  //Shooter
+  
+  int shooterTargetSpeed = 100;
+  int shooterSlowSpeed = 50;
+  int shooterStop = 0;
 
   //Gyro
 
