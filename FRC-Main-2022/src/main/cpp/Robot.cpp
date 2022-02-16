@@ -65,8 +65,6 @@
     
     //ColorSensorV3
 
-    /*
-
     frc::Color detectedColor = m_colorSensor.GetColor();
     double IR = m_colorSensor.GetIR();
     uint32_t proximity = m_colorSensor.GetProximity();
@@ -76,8 +74,6 @@
     frc::SmartDashboard::PutNumber("ColorSensor.Color.Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
-
-    */
 
   }
 
@@ -141,11 +137,17 @@
       }
     
     // Climber grip code
-      /*
+      
       if(m_driverController.GetXButton() && m_driverController.GetLeftBumper()){
-        m_
+        m_climberGrip.Set(-0.05);
       }
-      */
+      else if(m_driverController.GetXButton() && m_driverController.GetRightBumper()){
+        m_climberGrip.Set(0.05);
+      }
+      else{
+        m_climberGrip.Set(0.0);
+      }
+      
 
     //ColorSensorV3 Code
 

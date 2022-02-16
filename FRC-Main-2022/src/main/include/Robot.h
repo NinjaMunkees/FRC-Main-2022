@@ -111,16 +111,12 @@ class Robot : public frc::TimedRobot {
 
   //ColorSensorV3
 
-  /*
-
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
 
   rev::ColorSensorV3 m_colorSensor{i2cPort};
 
-  */
-
   frc::DriverStation::Alliance AllianceColor;
 
-  enum BallColor{};
+  enum BallColor{RedBall, BlueBall, InvalidBall};
 
 };
