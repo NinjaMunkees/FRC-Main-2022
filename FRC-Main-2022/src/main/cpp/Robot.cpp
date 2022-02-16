@@ -8,8 +8,8 @@
   void Robot::RobotInit()
   {
     // Assigning Falcons
-    m_ShooterLeft = new TalonFX(6);
-    m_ShooterRight = new TalonFX(5);
+    m_ShooterLeft = new TalonFX(5);
+    m_ShooterRight = new TalonFX(6);
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
