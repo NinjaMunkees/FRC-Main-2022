@@ -75,8 +75,8 @@ class Robot : public frc::TimedRobot {
   //rev::CANSparkMax m_frontLeft{3, rev::CANSparkMax::MotorType::kBrushless};
   //rev::CANSparkMax m_backLeft{4, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax m_climberMain{9, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax m_climberWinch{10, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_climberWinch{9, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
   TalonFX * m_ShooterRight;
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
