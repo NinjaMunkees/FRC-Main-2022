@@ -65,15 +65,15 @@ class Robot : public frc::TimedRobot {
 
   //Drive-train
 
-  frc::PWMSparkMax m_frontLeftMotor{2};
-  frc::PWMSparkMax m_rearLeftMotor{3};
-  frc::PWMSparkMax m_frontRightMotor{0};
-  frc::PWMSparkMax m_rearRightMotor{1};
+  //frc::PWMSparkMax m_frontLeftMotor{2};
+  //frc::PWMSparkMax m_rearLeftMotor{3};
+  //frc::PWMSparkMax m_frontRightMotor{0};
+  //frc::PWMSparkMax m_rearRightMotor{1};
   rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_frontRight{1, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_backRight{2, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_frontLeft{3, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_backLeft{4, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_frontRightMotor{1, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_rearRightMotor{2, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_frontLeftMotor{3, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_rearLeftMotor{4, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_climberWinch{9, rev::CANSparkMax::MotorType::kBrushless};
