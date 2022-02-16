@@ -86,7 +86,7 @@ class Robot : public frc::TimedRobot {
 
   //Shooter
   
-  double shooterTargetSpeed = 10;
+  double shooterTargetSpeed = 107;
   double shooterSlowSpeed = 5;
 
   //Gyro
@@ -111,9 +111,14 @@ class Robot : public frc::TimedRobot {
 
   //ColorSensorV3
 
+  /*
+
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
 
   rev::ColorSensorV3 m_colorSensor{i2cPort};
+
+  */
+
   frc::DriverStation::Alliance AllianceColor;
 
   enum BallColor{};

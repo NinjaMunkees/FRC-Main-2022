@@ -35,12 +35,16 @@
 
     //Code that sends videoioutput from a webcam to the driver station
 
+    /*
+
     #if defined(__linux__) || defined(_WIN32)
     frc::CameraServer::StartAutomaticCapture();
   #else
     std::fputs("Vision only available on Linux or Windows.\n", stderr);
     std::fflush(stderr);
   #endif
+  
+  */
   }
 
   void Robot::RobotPeriodic()
@@ -61,6 +65,8 @@
     
     //ColorSensorV3
 
+    /*
+
     frc::Color detectedColor = m_colorSensor.GetColor();
     double IR = m_colorSensor.GetIR();
     uint32_t proximity = m_colorSensor.GetProximity();
@@ -70,6 +76,9 @@
     frc::SmartDashboard::PutNumber("ColorSensor.Color.Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
+
+    */
+
   }
 
   void Robot::TeleopInit(){
@@ -122,10 +131,10 @@
     // Climber winch code
 
       if(m_driverController.GetBButton() && m_driverController.GetLeftBumper()){
-        m_climberWinch.Set(0.005);
+        m_climberWinch.Set(0.5);
       }
       else if(m_driverController.GetBButton() && m_driverController.GetRightBumper()){
-        m_climberWinch.Set(-0.005);
+        m_climberWinch.Set(-0.5);
       }
       else{
         m_climberWinch.Set(0.0);
