@@ -84,8 +84,8 @@ class Robot : public frc::TimedRobot {
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
   frc::XboxController m_driverController{0};
 
-  rev::CANEncoder gripEncoder = m_climberGrip.GetEncoder();
-  rev::CANEncoder turretEncoder = m_turretMotor.GetEncoder();
+  rev::SparkMaxRelativeEncoder gripEncoder = m_climberGrip.GetEncoder();
+  rev::SparkMaxRelativeEncoder turretEncoder = m_turretMotor.GetEncoder();
 
   //Shooter
   
