@@ -75,6 +75,11 @@
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
 
+    //Encoders
+
+    frc::SmartDashboard::PutNumber("Encoder Position", m_gripEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Encoder Position", m_turretEncoder.GetPosition());
+
   }
 
   void Robot::TeleopInit(){
@@ -87,61 +92,67 @@
     //Turret Code
 
     double TriggerSpeed = 0.05;
-    double LeftTrigger = m_driverController.GetLeftTriggerAxis();
-    double RightTrigger = m_driverController.GetRightTriggerAxis();
+    double LeftTrigger = buttonBoard.GetRawButton(4);
+    double RightTrigger = buttonBoard.GetRawButton(8);
 
     double TurretSpeed = -1 * TriggerSpeed * LeftTrigger + RightTrigger * TriggerSpeed;
 
-     m_turretMotor.Set(TurretSpeed);
+    m_turretMotor.Set(TurretSpeed);
 
-    m_robotDrive.TankDrive(-m_driverController.GetLeftY()*0.85,-m_driverController.GetRightY()*0.85);
+    m_robotDrive.TankDrive(-JLeft.GetY()*0.85,-JRight.GetY()*0.85);
 
-    //Shooter Code 
+    //Shooter & intake Code 
 
+      /*
       frc::SmartDashboard::PutBoolean("AButtonPress", m_driverController.GetAButtonPressed());
       frc::SmartDashboard::PutBoolean("AButtonRelease", m_driverController.GetAButtonReleased());
       frc::SmartDashboard::PutBoolean("AButton", m_driverController.GetAButton());
       frc::SmartDashboard::PutBoolean("XButton", m_driverController.GetXButton());
+      */
 
-      if(m_driverController.GetAButton()){
+      if(buttonBoard.GetRawButton(9)){
         m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed); 
         m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
-      }
-      else {  
-        m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
-        m_ShooterRight->Set(ControlMode::PercentOutput, 0); 
-      }
-
-    // Intake code
-
-      if(m_driverController.GetYButtonPressed()){
         m_intake.Set(0.05);
       }
-      else if(m_driverController.GetYButtonPressed() && m_driverController.GetLeftBumper()){
+      if(buttonBoard.GetRawButton(10)){
+        m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
+        m_ShooterRight->Set(ControlMode::PercentOutput, 0);
+        m_intake.Set(0.0); 
+      }
+
+    /* Intake code
+
+      if(buttonBoard.GetRawButton(9)){
+        m_intake.Set(0.05);
+      }
+      else if(buttonBoard.GetRawButton(11)){
         m_intake.Set(0.05 * -1);
       }
-      else if(m_driverController.GetYButton() && m_driverController.GetRightBumper()){
+      else if(buttonBoard.GetRawButton(10)){
         m_intake.Set(0.0);
       }
-      
+    */
+
     // Climber winch code
 
-      if(m_driverController.GetBButton() && m_driverController.GetLeftBumper()){
+      if(buttonBoard.GetRawButton(1)){
         m_climberWinch.Set(0.5);
       }
-      else if(m_driverController.GetBButton() && m_driverController.GetRightBumper()){
+      else if(buttonBoard.GetRawButton(5)){
         m_climberWinch.Set(-0.5);
       }
       else{
         m_climberWinch.Set(0.0);
       }
+      
     
     // Climber grip code
       
-      if(m_driverController.GetXButton() && m_driverController.GetLeftBumper()){
+      if(buttonBoard.GetRawButton(2)){
         m_climberGrip.Set(-0.05);
       }
-      else if(m_driverController.GetXButton() && m_driverController.GetRightBumper()){
+      else if(buttonBoard.GetRawButton(6)){
         m_climberGrip.Set(0.05);
       }
       else{
