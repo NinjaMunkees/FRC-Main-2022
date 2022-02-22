@@ -89,6 +89,7 @@ class Robot : public frc::TimedRobot {
 
   rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
+  rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
 
   //Shooter
   
