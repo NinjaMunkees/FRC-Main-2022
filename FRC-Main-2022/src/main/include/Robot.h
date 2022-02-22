@@ -92,7 +92,7 @@ class Robot : public frc::TimedRobot {
 
   //Shooter
   
-  double shooterTargetSpeed = 690;
+  double shooterTargetSpeed = 0.8;
   double shooterSlowSpeed = 5;
 
   //Gyro

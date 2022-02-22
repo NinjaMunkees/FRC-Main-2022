@@ -116,10 +116,10 @@
         m_intake.Set(0.0); 
       }
       else if(buttonBoard.GetRawButton(9)){
-        m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed); 
-        m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
-        m_intake.Set(0.05);
-      }
+        m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed); 
+        m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+        m_intake.Set(-0.65);
+        }
 
     /* Intake code
 
