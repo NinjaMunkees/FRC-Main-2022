@@ -45,6 +45,12 @@
   #endif
   
   */
+
+  //Limelight code
+
+  table->PutNumber("ledMode", 3);
+  table->PutNumber("camMode", 0);
+
   }
 
   void Robot::RobotPeriodic()

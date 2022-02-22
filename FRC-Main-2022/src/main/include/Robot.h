@@ -133,5 +133,6 @@ class Robot : public frc::TimedRobot {
   double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
   double targetArea = table->GetNumber("ta",0.0);
   double targetSkew = table->GetNumber("ts",0.0);
+  bool targetDetect = table->GetBoolean("tv",false);
 
 };
