@@ -79,6 +79,8 @@
 
     frc::SmartDashboard::PutNumber("Encoder Position", m_gripEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("Encoder Position", m_turretEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Encoder Position", m_climberEncoder.GetPosition());
+
 
   }
 
