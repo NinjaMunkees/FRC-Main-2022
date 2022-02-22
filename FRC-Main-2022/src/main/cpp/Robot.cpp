@@ -35,7 +35,7 @@
 
     //Code that sends videoioutput from a webcam to the driver station
 
-    /*
+    /* //Basic Vision
 
     #if defined(__linux__) || defined(_WIN32)
     frc::CameraServer::StartAutomaticCapture();
