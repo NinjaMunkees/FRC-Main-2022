@@ -70,9 +70,9 @@
 
     //Encoders
 
-    frc::SmartDashboard::PutNumber("Encoder Position", m_gripEncoder.GetPosition());
-    frc::SmartDashboard::PutNumber("Encoder Position", m_turretEncoder.GetPosition());
-    frc::SmartDashboard::PutNumber("Encoder Position", m_climberEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Grip Encoder Position", m_gripEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
 
     //Limit switch
 
