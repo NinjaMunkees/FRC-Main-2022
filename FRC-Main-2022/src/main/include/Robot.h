@@ -52,8 +52,8 @@ class Robot : public frc::TimedRobot {
  public:
   void RobotInit() override;
   void RobotPeriodic() override;
-  //void AutonomousInit() override;
-  //void AutonomousPeriodic() override;
+  void AutonomousInit() override; 
+  void AutonomousPeriodic() override;
   void TeleopInit() override;      
   void TeleopPeriodic() override;
   //void TestPeriodic() override;
@@ -63,7 +63,7 @@ class Robot : public frc::TimedRobot {
 
  private:
 
-  //Drive-train
+  //Motors
 
   //frc::PWMSparkMax m_frontLeftMotor{2};
   //frc::PWMSparkMax m_rearLeftMotor{3};
@@ -78,7 +78,7 @@ class Robot : public frc::TimedRobot {
   rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_climberWinch{9, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
-  TalonFX * m_ShooterRight;
+  //TalonFX * m_ShooterRight;
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
@@ -87,9 +87,13 @@ class Robot : public frc::TimedRobot {
   frc::Joystick JRight{1};
   frc::Joystick buttonBoard{2};
 
+  //Encoders
+
   rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
+
+  frc::DigitalInput m_turretlimitSwitch {0};  //limit switch for turret
 
   //Shooter
   
@@ -134,5 +138,10 @@ class Robot : public frc::TimedRobot {
   double targetArea = table->GetNumber("ta",0.0);
   double targetSkew = table->GetNumber("ts",0.0);
   bool targetDetect = table->GetBoolean("tv",false);
+
+  //limit switch code
+
+  bool autoHoming;
+  double turretEncoderStart;
 
 };

@@ -9,12 +9,12 @@
   {
     // Assigning Falcons
     m_ShooterLeft = new TalonFX(5);
-    m_ShooterRight = new TalonFX(6);
+    //m_ShooterRight = new TalonFX(6);
+
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     m_leftMotor.SetInverted(true);
-    //m_ShooterLeft->SetInverted(true);
 
     //ColorSensorV3
 
@@ -32,19 +32,6 @@
            break;
       
     }
-
-    //Code that sends videoioutput from a webcam to the driver station
-
-    /* //Basic Vision
-
-    #if defined(__linux__) || defined(_WIN32)
-    frc::CameraServer::StartAutomaticCapture();
-  #else
-    std::fputs("Vision only available on Linux or Windows.\n", stderr);
-    std::fflush(stderr);
-  #endif
-  
-  */
 
   //Limelight code
 
@@ -87,7 +74,30 @@
     frc::SmartDashboard::PutNumber("Encoder Position", m_turretEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("Encoder Position", m_climberEncoder.GetPosition());
 
+    //Limit switch
 
+    frc::SmartDashboard::PutBoolean("Turret Limit Switch Position", m_turretlimitSwitch.Get());
+    frc::SmartDashboard::PutBoolean("Homing Mode", autoHoming);
+
+  }
+
+  void Robot::AutonomousInit(){
+    autoHoming = true;
+  }
+
+  void Robot::AutonomousPeriodic(){
+        
+    if(autoHoming == true){
+      
+      if(m_turretlimitSwitch.Get()){
+        m_turretMotor.Set(0);
+        autoHoming = false;
+        turretEncoderStart = m_turretEncoder.GetPosition();
+      }
+      else{
+        m_turretMotor.Set(0.05);
+      }
+    }
   }
 
   void Robot::TeleopInit(){
@@ -120,27 +130,14 @@
 
       if(buttonBoard.GetRawButton(10)){
         m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
-        m_ShooterRight->Set(ControlMode::PercentOutput, 0);
+        //m_ShooterRight->Set(ControlMode::PercentOutput, 0);
         m_intake.Set(0.0); 
       }
       else if(buttonBoard.GetRawButton(9)){
         m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed); 
-        m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+        //m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
         m_intake.Set(-0.65);
         }
-
-    /* Intake code
-
-      if(buttonBoard.GetRawButton(9)){
-        m_intake.Set(0.05);
-      }
-      else if(buttonBoard.GetRawButton(11)){
-        m_intake.Set(0.05 * -1);
-      }
-      else if(buttonBoard.GetRawButton(10)){
-        m_intake.Set(0.0);
-      }
-    */
 
     // Climber winch code
 
@@ -157,11 +154,11 @@
     
     // Climber grip code
       
-      if(buttonBoard.GetRawButton(2)){
-        m_climberGrip.Set(-0.05);
+      if(buttonBoard.GetRawButtonPressed(2)){
+        m_gripEncoder.SetPosition(0.86);
       }
-      else if(buttonBoard.GetRawButton(6)){
-        m_climberGrip.Set(0.05);
+      else if(buttonBoard.GetRawButtonPressed(6)){
+        m_gripEncoder.SetPosition(0.1);
       }
       else{
         m_climberGrip.Set(0.0);
@@ -176,7 +173,7 @@
 
 Robot::~Robot(){
  delete m_ShooterLeft;
- delete m_ShooterRight;
+ //delete m_ShooterRight;
 }
 
 
