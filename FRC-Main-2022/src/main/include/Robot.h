@@ -78,7 +78,7 @@ class Robot : public frc::TimedRobot {
   rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_climberWinch{9, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
-  //TalonFX * m_ShooterRight;
+  TalonFX * m_ShooterRight;
   frc::MotorControllerGroup m_leftMotor{m_frontLeftMotor,m_rearLeftMotor};
   frc::MotorControllerGroup m_rightMotor{m_frontRightMotor, m_rearRightMotor};
   frc::DifferentialDrive m_robotDrive{m_leftMotor, m_rightMotor};
@@ -97,8 +97,8 @@ class Robot : public frc::TimedRobot {
 
   //Shooter
   
-  double shooterTargetSpeed = 0.8;
-  double shooterSlowSpeed = 5;
+  double shooterTargetSpeed = 1;
+  double shooterSlowSpeed = .05;
 
   //Gyro
 

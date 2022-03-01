@@ -9,7 +9,7 @@
   {
     // Assigning Falcons
     m_ShooterLeft = new TalonFX(5);
-    //m_ShooterRight = new TalonFX(6);
+    m_ShooterRight = new TalonFX(6);
 
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
@@ -130,12 +130,12 @@
 
       if(buttonBoard.GetRawButton(10)){
         m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
-        //m_ShooterRight->Set(ControlMode::PercentOutput, 0);
+        m_ShooterRight->Set(ControlMode::PercentOutput, 0);
         m_intake.Set(0.0); 
       }
       else if(buttonBoard.GetRawButton(9)){
-        m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed); 
-        //m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+        m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+        m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
         m_intake.Set(-0.65);
         }
 
@@ -173,7 +173,7 @@
 
 Robot::~Robot(){
  delete m_ShooterLeft;
- //delete m_ShooterRight;
+ delete m_ShooterRight;
 }
 
 
