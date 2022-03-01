@@ -128,12 +128,12 @@
       frc::SmartDashboard::PutBoolean("XButton", m_driverController.GetXButton());
       */
 
-      if(buttonBoard.GetRawButton(10)){
+      if(buttonBoard.GetRawButtonPressed(10)){
         m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
         //m_ShooterRight->Set(ControlMode::PercentOutput, 0);
         m_intake.Set(0.0); 
       }
-      else if(buttonBoard.GetRawButton(9)){
+      else if(buttonBoard.GetRawButtonPressed(9)){
         m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
         //m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
         m_intake.Set(-0.65);
