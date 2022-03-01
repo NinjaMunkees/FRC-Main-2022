@@ -166,7 +166,24 @@
       
 
     //ColorSensorV3 Code
+    
+    //Homing code
 
+    if(autoHoming == true){
+
+      if(m_turretlimitSwitch.Get()){
+        m_turretMotor.Set(0);
+        autoHoming = false;
+        turretEncoderStart = m_turretEncoder.GetPosition();
+      }
+      else{
+        m_turretMotor.Set(0.05);
+      }
+    }
+    if(buttonBoard.GetRawButtonPressed(7)){
+      
+      autoHoming = true;
+    } 
   }
 
 //Destructor (Cleans up stuff)
