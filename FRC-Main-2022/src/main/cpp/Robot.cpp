@@ -142,10 +142,10 @@
     // Climber winch code
 
       if(buttonBoard.GetRawButton(1)){
-        m_climberWinch.Set(0.5);
+        m_climberWinch.Set(-0.5);
       }
       else if(buttonBoard.GetRawButton(5)){
-        m_climberWinch.Set(-0.5);
+        m_climberWinch.Set(0.5);
       }
       else{
         m_climberWinch.Set(0.0);
@@ -154,11 +154,11 @@
     
     // Climber grip code
       
-      if(buttonBoard.GetRawButtonPressed(2)){
-        m_gripEncoder.SetPosition(0.86);
+      if(buttonBoard.GetRawButton(2)){
+        m_climberGrip.Set(0.15);
       }
-      else if(buttonBoard.GetRawButtonPressed(6)){
-        m_gripEncoder.SetPosition(0.1);
+      else if(buttonBoard.GetRawButton(6)){
+        m_climberGrip.Set(-0.15);
       }
       else{
         m_climberGrip.Set(0.0);
