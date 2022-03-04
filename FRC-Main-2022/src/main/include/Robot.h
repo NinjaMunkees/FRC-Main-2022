@@ -94,6 +94,16 @@ class Robot : public frc::TimedRobot {
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
 
   double gripStartPosition;
+  double gripPosition;
+  enum gripState{gripOpening, gripClosing, gripStopped};
+  gripState gripState;
+  double gripMax;
+
+  double turretStartPosition;
+  double turretPosition;
+  enum homingState{automatic, manual, homingOff};
+  homingState homingState;
+  double turretMax;
 
   //Limit switch
 

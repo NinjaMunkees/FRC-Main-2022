@@ -35,10 +35,20 @@
 
   //Limelight code
 
-  table->PutNumber("ledMode", 3);
-  table->PutNumber("camMode", 0);
+    table->PutNumber("ledMode", 3);
+    table->PutNumber("camMode", 0);
 
-  gripStartPosition = m_climberEncoder.GetPosition();
+  //Grip code
+
+    gripStartPosition = m_climberEncoder.GetPosition();
+    gripState = gripStopped;
+    gripMax = gripStartPosition + 0.5;
+
+  //Turret code
+
+    m_turretEncoder.SetPosition(0);
+    homingState = manual;
+    turretMax = 5;
 
   }
 
@@ -79,7 +89,38 @@
     //Limit switch
 
     frc::SmartDashboard::PutBoolean("Turret Limit Switch Position", m_turretlimitSwitch.Get());
-    frc::SmartDashboard::PutBoolean("Homing Mode", autoHoming);
+
+    //Homing mode
+
+    switch (homingState)
+    {
+    case automatic:
+      frc::SmartDashboard::PutString("Homing State", "Automatic");
+        break;
+    case manual:
+      frc::SmartDashboard::PutString("Homing State", "Manual");
+        break;
+    case homingOff:
+      frc::SmartDashboard::PutString("Homing State", "Off");
+        break;
+    default:
+      break;
+    }
+
+        switch (gripState)
+    {
+    case gripOpening:
+      frc::SmartDashboard::PutString("Grip State", "Opening");
+        break;
+    case gripClosing:
+      frc::SmartDashboard::PutString("Grip State", "Closing");
+        break;
+    case gripStopped:
+      frc::SmartDashboard::PutString("Grip State", "Stopped");
+        break;
+    default:
+      break;
+    }
 
   }
 
@@ -117,7 +158,35 @@
 
     double TurretSpeed = -1 * TriggerSpeed * LeftTrigger + RightTrigger * TriggerSpeed;
 
-    m_turretMotor.Set(TurretSpeed);
+    turretPosition = m_turretEncoder.GetPosition();
+
+    switch (homingState)
+    {
+    case automatic:
+      m_turretMotor.Set(TriggerSpeed);
+      break;
+    case manual:
+      if(TurretSpeed < 0){
+        m_turretMotor.Set(TurretSpeed);
+      }
+      else{
+        m_turretMotor.Set(0);
+      }
+      break;
+    case homingOff:
+      if(TurretSpeed < 0 && turretPosition > 0){
+        m_turretMotor.Set(TurretSpeed);
+      } 
+      else if(TurretSpeed > 0 && turretPosition < turretMax){
+        m_turretMotor.Set(TurretSpeed);
+      }
+      else{
+        m_turretMotor.Set(0);
+      }
+      break;
+    default:
+      break;
+    }
 
     m_robotDrive.TankDrive(-JLeft.GetY()*0.85,-JRight.GetY()*0.85);
 
@@ -155,15 +224,26 @@
       
     
     // Climber grip code
-      
-      if(buttonBoard.GetRawButton(2)){
-        //m_climberGrip.Set(0.15);
-        m_gripEncoder.SetPosition(gripStartPosition + .86);
+
+      //grip open is 
+
+      if(buttonBoard.GetRawButtonPressed(6)){
+        gripState = gripOpening;
+      };
+      if(buttonBoard.GetRawButtonPressed(2)){
+        gripState = gripClosing;
       }
-      else if(buttonBoard.GetRawButton(6)){
+
+      gripPosition = m_gripEncoder.GetPosition();
+
+      if(gripState == gripClosing && gripPosition <= gripMax){
+        m_climberGrip.Set(0.15);
+      }
+      else if(gripState == gripOpening && gripPosition >= gripStartPosition){
         m_climberGrip.Set(-0.15);
       }
       else{
+        gripState = gripStopped;
         m_climberGrip.Set(0.0);
       }
       
@@ -172,20 +252,12 @@
     
     //Homing code
 
-    if(autoHoming == true){
+    if(homingState == manual || homingState == automatic){
 
       if(m_turretlimitSwitch.Get()){
-        m_turretMotor.Set(0);
-        autoHoming = false;
-        turretEncoderStart = m_turretEncoder.GetPosition();
+        m_turretEncoder.SetPosition(0);
+        homingState = homingOff;
       }
-      else{
-        m_turretMotor.Set(0.05);
-      }
-    }
-    if(buttonBoard.GetRawButtonPressed(7)){
-      
-      autoHoming = true;
     } 
   }
 
