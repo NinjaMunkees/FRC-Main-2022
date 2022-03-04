@@ -48,7 +48,7 @@
 
     m_turretEncoder.SetPosition(0);
     homingState = manual;
-    turretMax = 5;
+    turretMax = -5;
 
   }
 
@@ -166,7 +166,7 @@
       m_turretMotor.Set(TriggerSpeed);
       break;
     case manual:
-      if(TurretSpeed < 0){
+      if(TurretSpeed > 0){
         m_turretMotor.Set(TurretSpeed);
       }
       else{
@@ -174,10 +174,10 @@
       }
       break;
     case homingOff:
-      if(TurretSpeed < 0 && turretPosition > 0){
+      if(TurretSpeed < 0 && turretPosition < 0){
         m_turretMotor.Set(TurretSpeed);
       } 
-      else if(TurretSpeed > 0 && turretPosition < turretMax){
+      else if(TurretSpeed > 0 && turretPosition > turretMax){
         m_turretMotor.Set(TurretSpeed);
       }
       else{
