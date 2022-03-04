@@ -93,6 +93,10 @@ class Robot : public frc::TimedRobot {
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
 
+  double gripStartPosition;
+
+  //Limit switch
+
   frc::DigitalInput m_turretlimitSwitch {0};  //limit switch for turret
 
   //Shooter

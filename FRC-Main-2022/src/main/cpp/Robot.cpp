@@ -38,6 +38,8 @@
   table->PutNumber("ledMode", 3);
   table->PutNumber("camMode", 0);
 
+  gripStartPosition = m_climberEncoder.GetPosition();
+
   }
 
   void Robot::RobotPeriodic()
@@ -155,7 +157,8 @@
     // Climber grip code
       
       if(buttonBoard.GetRawButton(2)){
-        m_climberGrip.Set(0.15);
+        //m_climberGrip.Set(0.15);
+        m_gripEncoder.SetPosition(gripStartPosition + .86);
       }
       else if(buttonBoard.GetRawButton(6)){
         m_climberGrip.Set(-0.15);
