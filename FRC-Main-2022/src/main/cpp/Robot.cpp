@@ -48,7 +48,7 @@
 
     m_turretEncoder.SetPosition(0);
     homingState = manual;
-    turretMax = -5;
+    turretMax = -12;
 
   }
 
@@ -82,9 +82,9 @@
 
     //Encoders
 
-    frc::SmartDashboard::PutNumber("Encoder Position", m_gripEncoder.GetPosition());
-    frc::SmartDashboard::PutNumber("Encoder Position", m_turretEncoder.GetPosition());
-    frc::SmartDashboard::PutNumber("Encoder Position", m_climberEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Grip Encoder Position", m_gripEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
 
     //Limit switch
 
@@ -152,7 +152,7 @@
 
     //Turret Code
 
-    double TriggerSpeed = 0.05;
+    double TriggerSpeed = 0.1;
     double LeftTrigger = buttonBoard.GetRawButton(4);
     double RightTrigger = buttonBoard.GetRawButton(8);
 
@@ -174,10 +174,10 @@
       }
       break;
     case homingOff:
-      if(TurretSpeed < 0 && turretPosition < 0){
+      if(TurretSpeed < 0 && turretPosition > turretMax){
         m_turretMotor.Set(TurretSpeed);
       } 
-      else if(TurretSpeed > 0 && turretPosition > turretMax){
+      else if(TurretSpeed > 0 && turretPosition < 0){
         m_turretMotor.Set(TurretSpeed);
       }
       else{
