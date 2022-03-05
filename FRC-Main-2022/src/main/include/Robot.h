@@ -62,16 +62,10 @@ class Robot : public frc::TimedRobot {
   //void TestPeriodic() override;
   ~Robot();
 
-  //Robot task setup
-
  private:
 
   //Motors
 
-  //frc::PWMSparkMax m_frontLeftMotor{2};
-  //frc::PWMSparkMax m_rearLeftMotor{3};
-  //frc::PWMSparkMax m_frontRightMotor{0};
-  //frc::PWMSparkMax m_rearRightMotor{1};
   rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_frontRightMotor{1, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_rearRightMotor{2, rev::CANSparkMax::MotorType::kBrushless};
@@ -138,8 +132,9 @@ class Robot : public frc::TimedRobot {
   //Shooter & Intake
   
   double shooterTargetSpeed = 1;
-  double shooterSlowSpeed = .25;
-  double intakeTargetSpeed = -0.65;
+  const double shooterFastSpeed = 1;
+  const double shooterSlowSpeed = .25;
+  const double intakeTargetSpeed = -0.65;
 
   //Gyro
 

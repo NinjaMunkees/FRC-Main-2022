@@ -153,13 +153,6 @@
     default:
       break;
     }
-
-    //Shooter
-
-    /*
-    frc::SmartDashboard::PutNumber("Left Shooter Output", shooterLeftOutput);
-    frc::SmartDashboard::PutNumber("Right Shooter Output", shooterRightOutput);
-    */
   }
 
   void Robot::AutonomousInit(){
@@ -179,30 +172,8 @@
 
   void Robot::AutonomousPeriodic(){
         
-    /*
-    if(autoHoming == true){
-    
-      if(m_turretlimitSwitch.Get()){
-        m_turretMotor.Set(0);
-        autoHoming = false;
-        turretEncoderStart = m_turretEncoder.GetPosition();
-      }
-      else{
-        m_turretMotor.Set(0.1);
-      }
-    }
-  */
-      m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
-      m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
-    
-    /*
-    (m_ShooterRight->GetSelectedSensorVelocity() >= ){
-      m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
-      m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
-    }
-    */
-    
-    //if()
+    m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
+    m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
 
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
@@ -224,8 +195,6 @@
       m_time.Start();
       }
     }
-    //frc::SmartDashboard::PutNumber("Left Shooter Output", shooterLeftOutput);
-    //frc::SmartDashboard::PutNumber("Right Shooter Output", shooterRightOutput);
 
     if(m_time.Get().value() >= 3){
     
@@ -293,35 +262,33 @@
 
     //Shooter & intake Code 
 
-      /*
-      frc::SmartDashboard::PutBoolean("AButtonPress", m_driverController.GetAButtonPressed());
-      frc::SmartDashboard::PutBoolean("AButtonRelease", m_driverController.GetAButtonReleased());
-      frc::SmartDashboard::PutBoolean("AButton", m_driverController.GetAButton());
-      frc::SmartDashboard::PutBoolean("XButton", m_driverController.GetXButton());
-      */
-
       if(buttonBoard.GetRawButton(11)){
-        m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
-        m_ShooterRight->Set(ControlMode::PercentOutput, 0);
+        shooterTargetSpeed = 0;
         m_intake.Set(0.0); 
       }
+      else if(buttonBoard.GetRawButton(3)){
+        shooterTargetSpeed = shooterSlowSpeed;
+      }
       else if(buttonBoard.GetRawButton(9)){
-        m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
-        m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
+        shooterTargetSpeed = shooterFastSpeed;
       }
-      if(buttonBoard.GetRawButton(3)){
-        m_ShooterLeft->Set(ControlMode::PercentOutput, shooterSlowSpeed * -1);
-        m_ShooterRight->Set(ControlMode::PercentOutput, shooterSlowSpeed);
 
-      }
       if(buttonBoard.GetRawButtonPressed(10)){
         m_intake.Set(intakeTargetSpeed);
       }
       else if(buttonBoard.GetRawButtonPressed(7)){
         m_intake.Set(intakeTargetSpeed * -1);
       }
-      //shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
-      //shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
+
+      //The below color sensor code over-rides user input for shooter speed
+
+      if(detectedBallColor == RedBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
+        shooterTargetSpeed = shooterSlowSpeed;
+      }
+      else if(detectedBallColor == BlueBall && AllianceColor == frc::DriverStation::Alliance::kRed){
+        shooterTargetSpeed = shooterSlowSpeed;
+      }
+
 
     // Climber winch code
 
@@ -360,9 +327,6 @@
         m_climberGrip.Set(0.0);
       }
       
-
-    //ColorSensorV3 Code
-    
     //Homing code
 
     if(homingState == manual || homingState == automatic){
@@ -371,7 +335,9 @@
         m_turretEncoder.SetPosition(0);
         homingState = homingOff;
       }
-    } 
+    }
+    m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+    m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
   }
 
 //Destructor (Cleans up stuff)
