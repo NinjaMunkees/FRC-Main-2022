@@ -127,14 +127,19 @@ class Robot : public frc::TimedRobot {
   double shooterLeftOutput;
   double shooterRightOutput;
 
+  frc::Timer m_time;
+
+  bool autoDriven;
+
   //Limit switch
 
   frc::DigitalInput m_turretlimitSwitch {0};  //limit switch for turret
 
-  //Shooter
+  //Shooter & Intake
   
   double shooterTargetSpeed = 1;
   double shooterSlowSpeed = .05;
+  double intakeTargetSpeed = -0.65;
 
   //Gyro
 

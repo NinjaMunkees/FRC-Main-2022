@@ -48,7 +48,7 @@
 
     m_turretEncoder.SetPosition(0);
     homingState = manual;
-    turretMax = -12;
+    turretMax = -13;
 
   }
 
@@ -90,6 +90,12 @@
 
     frc::SmartDashboard::PutBoolean("Turret Limit Switch Position", m_turretlimitSwitch.Get());
 
+    //Shooter
+
+    shooterRightOutput = m_ShooterRight->GetSelectedSensorVelocity();
+
+    frc::SmartDashboard::PutNumber("Right Shooter Velocity", shooterRightOutput);
+
     //Homing mode
 
     switch (homingState)
@@ -124,12 +130,25 @@
 
     //Shooter
 
+    /*
     frc::SmartDashboard::PutNumber("Left Shooter Output", shooterLeftOutput);
     frc::SmartDashboard::PutNumber("Right Shooter Output", shooterRightOutput);
+    */
   }
 
   void Robot::AutonomousInit(){
-    autoHoming = true;
+    autoHoming = false;
+
+    frontRightMax = 42;
+    rearLeftMax = 42 * -1; 
+
+    m_frontRightEncoder.SetPosition(0);
+    m_rearLeftEncoder.SetPosition(0);
+
+    m_time.Reset();
+
+    autoDriven = false;
+
   }
 
   void Robot::AutonomousPeriodic(){
@@ -147,29 +166,56 @@
       }
     }
   */
+      m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
+      m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
     
-    if(true){
-      //m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
-      //m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+    /*
+    (m_ShooterRight->GetSelectedSensorVelocity() >= ){
+      m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
+      m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
     }
+    */
+    
     //if()
 
-    //shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
-    //shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
+    shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
+    shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
-    frontRightMax = 1;
-    rearLeftMax = 1;
+    if(m_ShooterRight->GetSelectedSensorVelocity() >= 15000){
+      m_intake.Set(intakeTargetSpeed);
+    }
 
-    if(m_frontRightEncoder.GetPosition() < frontRightMax && m_rearLeftEncoder.GetPosition() < rearLeftMax){
+    if(m_frontRightEncoder.GetPosition() < frontRightMax && m_rearLeftEncoder.GetPosition() > rearLeftMax){
       m_leftMotor.Set(0.1);
       m_rightMotor.Set(0.1);
+      autoDriven = true;
     }
     else{
       m_leftMotor.Set(0);
       m_rightMotor.Set(0);
+
+      if(autoDriven == true){
+      m_time.Start();
+      }
     }
     //frc::SmartDashboard::PutNumber("Left Shooter Output", shooterLeftOutput);
     //frc::SmartDashboard::PutNumber("Right Shooter Output", shooterRightOutput);
+
+    if(m_time.Get().value() >= 3){
+    
+      if(m_turretlimitSwitch.Get()){
+        m_turretMotor.Set(0);
+        //autoHoming = false;
+        m_turretEncoder.SetPosition(0);     
+        homingState = homingOff;
+        }
+      else{
+        m_turretMotor.Set(0.1);
+        m_ShooterRight->Set(ControlMode::PercentOutput, 0);
+        m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
+        m_intake.Set(0);
+      }
+    }
   }
 
   void Robot::TeleopInit(){
@@ -228,7 +274,7 @@
       frc::SmartDashboard::PutBoolean("XButton", m_driverController.GetXButton());
       */
 
-      if(buttonBoard.GetRawButton(10)){
+      if(buttonBoard.GetRawButton(11)){
         m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
         m_ShooterRight->Set(ControlMode::PercentOutput, 0);
         m_intake.Set(0.0); 
@@ -236,9 +282,13 @@
       else if(buttonBoard.GetRawButton(9)){
         m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
         m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
-        m_intake.Set(-0.65);
       }
-
+      if(buttonBoard.GetRawButtonPressed(10)){
+        m_intake.Set(intakeTargetSpeed);
+      }
+      else if(buttonBoard.GetRawButtonPressed(7)){
+        m_intake.Set(intakeTargetSpeed * -1);
+      }
       //shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
       //shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
