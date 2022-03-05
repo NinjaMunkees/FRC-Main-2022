@@ -138,7 +138,7 @@
         turretEncoderStart = m_turretEncoder.GetPosition();
       }
       else{
-        m_turretMotor.Set(0.05);
+        m_turretMotor.Set(0.1);
       }
     }
   }
