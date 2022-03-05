@@ -10,6 +10,9 @@
 #include <string>
 #include <iostream>
 
+#include <chrono>
+#include <thread>
+
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
@@ -89,9 +92,16 @@ class Robot : public frc::TimedRobot {
 
   //Encoders
 
+  rev::SparkMaxRelativeEncoder m_frontRightEncoder = m_frontRightMotor.GetEncoder();
+  rev::SparkMaxRelativeEncoder m_rearRightEncoder = m_rearRightMotor.GetEncoder();
+  rev::SparkMaxRelativeEncoder m_frontLeftEncoder = m_frontLeftMotor.GetEncoder();
+  rev::SparkMaxRelativeEncoder m_rearLeftEncoder = m_rearLeftMotor.GetEncoder();
+
   rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
+
+  //Grip
 
   double gripStartPosition;
   double gripPosition;
@@ -99,11 +109,23 @@ class Robot : public frc::TimedRobot {
   gripState gripState;
   double gripMax;
 
+  //Turret
+
   double turretStartPosition;
   double turretPosition;
   enum homingState{automatic, manual, homingOff};
   homingState homingState;
   double turretMax;
+
+  //Auto
+
+  double frontRightMax;
+  double rearRightMax;
+  double frontLeftMax;
+  double rearLeftMax;
+
+  double shooterLeftOutput;
+  double shooterRightOutput;
 
   //Limit switch
 

@@ -122,6 +122,10 @@
       break;
     }
 
+    //Shooter
+
+    frc::SmartDashboard::PutNumber("Left Shooter Output", shooterLeftOutput);
+    frc::SmartDashboard::PutNumber("Right Shooter Output", shooterRightOutput);
   }
 
   void Robot::AutonomousInit(){
@@ -130,8 +134,9 @@
 
   void Robot::AutonomousPeriodic(){
         
+    /*
     if(autoHoming == true){
-      
+    
       if(m_turretlimitSwitch.Get()){
         m_turretMotor.Set(0);
         autoHoming = false;
@@ -141,6 +146,27 @@
         m_turretMotor.Set(0.1);
       }
     }
+  */
+    
+    if(true){
+      //m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
+      //m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+    }
+    //if()
+
+    //shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
+    //shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
+
+    if(m_frontRightEncoder.GetPosition() < frontRightMax && m_rearLeftEncoder.GetPosition() < rearLeftMax){
+      m_leftMotor.Set(0.1);
+      m_rightMotor.Set(0.1);
+    }
+    else{
+      m_leftMotor.Set(0);
+      m_rightMotor.Set(0);
+    }
+    //frc::SmartDashboard::PutNumber("Left Shooter Output", shooterLeftOutput);
+    //frc::SmartDashboard::PutNumber("Right Shooter Output", shooterRightOutput);
   }
 
   void Robot::TeleopInit(){
@@ -208,7 +234,10 @@
         m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
         m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
         m_intake.Set(-0.65);
-        }
+      }
+
+      //shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
+      //shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
     // Climber winch code
 
