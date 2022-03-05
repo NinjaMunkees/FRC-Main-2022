@@ -138,7 +138,7 @@ class Robot : public frc::TimedRobot {
   //Shooter & Intake
   
   double shooterTargetSpeed = 1;
-  double shooterSlowSpeed = .05;
+  double shooterSlowSpeed = .25;
   double intakeTargetSpeed = -0.65;
 
   //Gyro

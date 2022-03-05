@@ -283,6 +283,11 @@
         m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
         m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
       }
+      if(buttonBoard.GetRawButton(3)){
+        m_ShooterLeft->Set(ControlMode::PercentOutput, shooterSlowSpeed * -1);
+        m_ShooterRight->Set(ControlMode::PercentOutput, shooterSlowSpeed);
+
+      }
       if(buttonBoard.GetRawButtonPressed(10)){
         m_intake.Set(intakeTargetSpeed);
       }
