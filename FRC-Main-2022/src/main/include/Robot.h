@@ -170,6 +170,7 @@ class Robot : public frc::TimedRobot {
   frc::DriverStation::Alliance AllianceColor;
 
   enum BallColor{RedBall, BlueBall, InvalidBall};
+  BallColor detectedBallColor;
 
   //Limelight code 
 

@@ -18,6 +18,8 @@
 
     //ColorSensorV3
 
+    detectedBallColor = InvalidBall;
+
     AllianceColor = frc::DriverStation::GetAlliance();
     switch (AllianceColor)
     {
@@ -79,6 +81,30 @@
     frc::SmartDashboard::PutNumber("ColorSensor.Color.Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
+
+    if(detectedColor.red >= 0.32){
+      detectedBallColor = RedBall;
+    }
+    else if(detectedColor.blue >= 0.32){
+      detectedBallColor = BlueBall;
+    }
+    else{
+      detectedBallColor = InvalidBall;
+    }
+    
+    switch (detectedBallColor)
+    {
+      case BlueBall:
+           frc::SmartDashboard::PutString("Detected Ball Color", "Blue");
+           break;
+      case RedBall:
+           frc::SmartDashboard::PutString("Detected Ball Color", "Red");
+           break;
+      case InvalidBall:
+           frc::SmartDashboard::PutString("Detected Ball Color", "?");
+           break;
+      
+    }
 
     //Encoders
 
