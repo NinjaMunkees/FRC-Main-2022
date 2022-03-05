@@ -157,6 +157,9 @@
     //shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     //shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
+    frontRightMax = 1;
+    rearLeftMax = 1;
+
     if(m_frontRightEncoder.GetPosition() < frontRightMax && m_rearLeftEncoder.GetPosition() < rearLeftMax){
       m_leftMotor.Set(0.1);
       m_rightMotor.Set(0.1);
