@@ -82,7 +82,7 @@
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
 
-    if(detectedColor.red >= 0.32){
+    if(detectedColor.red >= 0.269){
       detectedBallColor = RedBall;
     }
     else if(detectedColor.blue >= 0.32){
