@@ -284,9 +284,6 @@
         shooterTargetSpeed = 0;
         m_intake.Set(0.0); 
       }
-      else if(buttonBoard.GetRawButton(3)){
-        shooterTargetSpeed = shooterSlowSpeed;
-      }
       else if(buttonBoard.GetRawButton(9)){
         shooterTargetSpeed = shooterFastSpeed;
       }
