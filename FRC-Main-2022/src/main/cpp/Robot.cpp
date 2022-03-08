@@ -51,6 +51,7 @@
     m_turretEncoder.SetPosition(0);
     homingState = manual;
     turretMax = -13;
+    homingDone = false;
 
   }
 
@@ -156,7 +157,6 @@
   }
 
   void Robot::AutonomousInit(){
-    autoHoming = false;
 
     frontRightMax = 42;
     rearLeftMax = 42 * -1; 
@@ -200,21 +200,24 @@
     
       if(m_turretlimitSwitch.Get()){
         m_turretMotor.Set(0);
-        //autoHoming = false;
+        homingDone = true;
         m_turretEncoder.SetPosition(0);     
         homingState = homingOff;
+
         }
       else{
         m_turretMotor.Set(0.1);
+        m_intake.Set(0);
+      }
         m_ShooterRight->Set(ControlMode::PercentOutput, 0);
         m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
         m_intake.Set(0);
-      }
     }
   }
 
   void Robot::TeleopInit(){
-  
+    m_time.Stop();
+    m_time.Reset();
   }
   
   void Robot::TeleopPeriodic()
@@ -222,7 +225,6 @@
 
     //Turret Code
 
-    double TriggerSpeed = 0.1;
     double LeftTrigger = buttonBoard.GetRawButton(4);
     double RightTrigger = buttonBoard.GetRawButton(8);
 
@@ -230,10 +232,26 @@
 
     turretPosition = m_turretEncoder.GetPosition();
 
+    if(buttonBoard.GetRawButtonPressed(3)){
+      homingState = automatic;
+    }
+    
+    if(buttonBoard.GetRawButtonPressed(4) || buttonBoard.GetRawButtonPressed(8) || buttonBoard.GetRawButtonPressed(11)){
+      if(homingDone){
+        homingState = homingOff;
+      }
+      else{
+        homingState = manual;
+      }
+    }
+
     switch (homingState)
     {
     case automatic:
-      m_turretMotor.Set(TriggerSpeed);
+      targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+      targetDetect = table->GetBoolean("tv",false);
+      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 30.0);
+      m_turretMotor.Set(turretTargetSpeed);
       break;
     case manual:
       if(TurretSpeed > 0){
@@ -283,12 +301,20 @@
       //The below color sensor code over-rides user input for shooter speed
 
       if(detectedBallColor == RedBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
-        shooterTargetSpeed = shooterSlowSpeed;
+        shooterTargetSpeed = 0;
+        m_time.Reset();
+        m_time.Start();
       }
       else if(detectedBallColor == BlueBall && AllianceColor == frc::DriverStation::Alliance::kRed){
-        shooterTargetSpeed = shooterSlowSpeed;
+        shooterTargetSpeed = 0;
+        m_time.Reset();
+        m_time.Start();
       }
-
+      if(m_time.Get().value() >= 1.5 && m_time.Get().value() < 1.6){
+        m_time.Stop();
+        m_time.Reset();
+        shooterTargetSpeed = shooterFastSpeed;
+      }
 
     // Climber winch code
 
@@ -329,18 +355,33 @@
       
     //Homing code
 
-    if(homingState == manual || homingState == automatic){
+    if(homingState == manual){
 
       if(m_turretlimitSwitch.Get()){
         m_turretEncoder.SetPosition(0);
         homingState = homingOff;
+        homingDone = true;
       }
     }
     m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
     m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
   }
 
-//Destructor (Cleans up stuff)
+  void Robot::TestPeriodic(){
+    
+    double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+    bool targetDetect = table->GetBoolean("tv",false);
+
+    double visionSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 30.0);
+
+    frc::SmartDashboard::PutNumber("Vision Horizontal Offset", targetOffsetAngle_Horizontal);
+    frc::SmartDashboard::PutNumber("Turret Speed for Vision", visionSpeed);
+
+    m_turretMotor.Set(visionSpeed);
+
+  }
+
+  //Destructor (Cleans up stuff)
 
 Robot::~Robot(){
  delete m_ShooterLeft;

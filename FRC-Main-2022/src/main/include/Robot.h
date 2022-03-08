@@ -59,7 +59,7 @@ class Robot : public frc::TimedRobot {
   void AutonomousPeriodic() override;
   void TeleopInit() override;      
   void TeleopPeriodic() override;
-  //void TestPeriodic() override;
+  void TestPeriodic() override;
   ~Robot();
 
  private:
@@ -135,6 +135,8 @@ class Robot : public frc::TimedRobot {
   const double shooterFastSpeed = 1;
   const double shooterSlowSpeed = .25;
   const double intakeTargetSpeed = -0.65;
+  const double TriggerSpeed = 0.1;
+
 
   //Gyro
 
@@ -170,15 +172,14 @@ class Robot : public frc::TimedRobot {
   //Limelight code 
 
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-  double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
-  double targetArea = table->GetNumber("ta",0.0);
-  double targetSkew = table->GetNumber("ts",0.0);
-  bool targetDetect = table->GetBoolean("tv",false);
+
+  double targetOffsetAngle_Horizontal;
+  bool targetDetect;
+  double turretTargetSpeed;
 
   //limit switch code
 
-  bool autoHoming;
+  bool homingDone;
   double turretEncoderStart;
 
 };
