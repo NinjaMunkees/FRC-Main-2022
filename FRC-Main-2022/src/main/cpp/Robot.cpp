@@ -191,9 +191,9 @@
       m_leftMotor.Set(0);
       m_rightMotor.Set(0);
 
-      if(autoDriven == true){
+    if(autoDriven == true){
       m_time.Start();
-      }
+    }
     }
 
     if(m_time.Get().value() >= 3){
@@ -203,8 +203,7 @@
         homingDone = true;
         m_turretEncoder.SetPosition(0);     
         homingState = homingOff;
-
-        }
+      }
       else{
         m_turretMotor.Set(0.1);
         m_intake.Set(0);
@@ -250,8 +249,11 @@
     case automatic:
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
       targetDetect = table->GetBoolean("tv",false);
-      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 30.0);
+
+      if(m_turretEncoder.GetPosition() < 1.15 && m_turretEncoder.GetPosition() > turretMax){
+      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 20.0);
       m_turretMotor.Set(turretTargetSpeed);
+      }
       break;
     case manual:
       if(TurretSpeed > 0){
