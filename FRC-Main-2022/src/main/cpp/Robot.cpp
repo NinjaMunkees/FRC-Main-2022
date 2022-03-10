@@ -44,7 +44,7 @@
 
     gripStartPosition = m_climberEncoder.GetPosition();
     gripState = gripStopped;
-    gripMax = gripStartPosition + 0.5;
+    gripMax = gripStartPosition + 0.79;
 
   //Turret code
 
@@ -225,7 +225,7 @@
   void Robot::TeleopPeriodic()
   {
 
-    shooterFastSpeed = (JLeft.GetZ() + 1) * -0.5;
+    shooterFastSpeed = (JLeft.GetZ() + 1) * 0.5;
 
     //Turret Code
 
