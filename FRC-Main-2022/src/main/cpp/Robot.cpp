@@ -181,7 +181,7 @@
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
-    if(m_ShooterRight->GetSelectedSensorVelocity() >= 15000 && m_timeToo.Get().value() >= 2){
+    if(m_ShooterRight->GetSelectedSensorVelocity() >= 15000 && m_timeToo.Get().value() >= 2){\
       m_intake.Set(intakeTargetSpeed);
     }
 
@@ -225,6 +225,8 @@
   void Robot::TeleopPeriodic()
   {
 
+    shooterFastSpeed = (JLeft.GetZ() + 1) * -0.5;
+
     //Turret Code
 
     double LeftTrigger = buttonBoard.GetRawButton(4);
@@ -253,7 +255,7 @@
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
       targetDetect = table->GetBoolean("tv",false);
 
-      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 20.0);
+      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal -10) / 20.0);
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
