@@ -132,7 +132,7 @@ class Robot : public frc::TimedRobot {
 
   //Shooter & Intake
   
-  double shooterTargetSpeed = 0.45;
+  double shooterTargetSpeed = 0.5;
   double shooterFastSpeed = 0.9;
   const double shooterSlowSpeed = .25;
   const double intakeTargetSpeed = -0.65;
