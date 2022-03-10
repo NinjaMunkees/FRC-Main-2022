@@ -231,7 +231,7 @@
 
     turretPosition = m_turretEncoder.GetPosition();
 
-    if(buttonBoard.GetRawButtonPressed(3)){
+    if(homingDone = true && buttonBoard.GetRawButtonPressed(3)){
       homingState = automatic;
     }
     
@@ -250,7 +250,7 @@
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
       targetDetect = table->GetBoolean("tv",false);
 
-      if(m_turretEncoder.GetPosition() < 1.15 && m_turretEncoder.GetPosition() > turretMax){
+      if(m_turretEncoder.GetPosition() < -0.5 && m_turretEncoder.GetPosition() > turretMax){
       turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 20.0);
       m_turretMotor.Set(turretTargetSpeed);
       }
