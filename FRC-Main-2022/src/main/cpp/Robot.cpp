@@ -165,12 +165,15 @@
     m_rearLeftEncoder.SetPosition(0);
 
     m_time.Reset();
+    m_timeToo.Reset();
 
     autoDriven = false;
 
   }
 
   void Robot::AutonomousPeriodic(){
+
+    m_timeToo.Start();
         
     m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
     m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
@@ -178,7 +181,7 @@
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
-    if(m_ShooterRight->GetSelectedSensorVelocity() >= 15000){
+    if(m_ShooterRight->GetSelectedSensorVelocity() >= 15000 && m_timeToo.Get().value() >= 2){
       m_intake.Set(intakeTargetSpeed);
     }
 

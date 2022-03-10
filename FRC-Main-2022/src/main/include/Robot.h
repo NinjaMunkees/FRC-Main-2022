@@ -122,6 +122,7 @@ class Robot : public frc::TimedRobot {
   double shooterRightOutput;
 
   frc::Timer m_time;
+  frc::Timer m_timeToo;
 
   bool autoDriven;
 
