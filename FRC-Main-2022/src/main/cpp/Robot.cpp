@@ -123,6 +123,8 @@
 
     frc::SmartDashboard::PutNumber("Right Shooter Velocity", shooterRightOutput);
 
+    frc::SmartDashboard::PutNumber("Shooter High Speed", shooterFastSpeed);
+
     //Homing mode
 
     switch (homingState)
@@ -255,7 +257,7 @@
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
       targetDetect = table->GetBoolean("tv",false);
 
-      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal -10) / 20.0);
+      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal -4) / 20.0);
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
