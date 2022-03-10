@@ -44,7 +44,7 @@
 
     gripStartPosition = m_climberEncoder.GetPosition();
     gripState = gripStopped;
-    gripMax = gripStartPosition + 0.79;
+    gripMax = gripStartPosition + 1.26;
 
   //Turret code
 
@@ -60,9 +60,9 @@
 
     //Gyro
 
-    frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle().value());
-    frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle().value());
-    frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle().value());
+    //frc::SmartDashboard::PutNumber("YawAngle", m_imu.GetAngle().value());
+    //frc::SmartDashboard::PutNumber("XCompAngle", m_imu.GetXComplementaryAngle().value());
+    //frc::SmartDashboard::PutNumber("YCompAngle", m_imu.GetYComplementaryAngle().value());
     m_setDecRate = frc::SmartDashboard::GetBoolean("SetDecRate", false);
     m_decRate = frc::SmartDashboard::GetNumber("DecRate", 4);
     m_runCal = frc::SmartDashboard::GetBoolean("RunCal", false);
@@ -183,7 +183,7 @@
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
-    if(m_ShooterRight->GetSelectedSensorVelocity() >= 15000 && m_timeToo.Get().value() >= 2){\
+    if(m_ShooterRight->GetSelectedSensorVelocity() >= 5000 && m_timeToo.Get().value() >= 2){
       m_intake.Set(intakeTargetSpeed);
     }
 

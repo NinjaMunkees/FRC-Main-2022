@@ -132,7 +132,7 @@ class Robot : public frc::TimedRobot {
 
   //Shooter & Intake
   
-  double shooterTargetSpeed = 0.9;
+  double shooterTargetSpeed = 0.45;
   double shooterFastSpeed = 0.9;
   const double shooterSlowSpeed = .25;
   const double intakeTargetSpeed = -0.65;
@@ -145,7 +145,7 @@ class Robot : public frc::TimedRobot {
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
-  frc::ADIS16470_IMU m_imu{};
+  //frc::ADIS16470_IMU m_imu{};
   frc::SendableChooser<std::string> m_yawChooser;
   const std::string kYawDefault = "Z-Axis";
   const std::string kYawXAxis = "X-Axis";
@@ -157,7 +157,7 @@ class Robot : public frc::TimedRobot {
   bool m_setYawAxis = false;
   uint16_t m_decRate = 4;
   bool m_setDecRate = false;
-  frc::ADIS16470_IMU::IMUAxis m_yawActiveAxis = frc::ADIS16470_IMU::IMUAxis::kZ;
+  //frc::ADIS16470_IMU::IMUAxis m_yawActiveAxis = frc::ADIS16470_IMU::IMUAxis::kZ;
 
   //ColorSensorV3
 
