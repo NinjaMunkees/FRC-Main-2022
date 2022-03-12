@@ -133,13 +133,15 @@ class Robot : public frc::TimedRobot {
 
   //Shooter & Intake
   
-  double shooterTargetSpeed = 0.5;
-  double shooterMidSpeed = 0.5;
+  double shooterTargetSpeed = 0.6;
+  double shooterMidSpeed = 0.6;
   double shooterFastSpeed = 0.75;
   const double shooterSlowSpeed = .25;
   const double intakeTargetSpeed = -0.8;
   const double TriggerSpeed = 0.1;
   bool shooterAlive;
+  double sixSet = 6;
+  double JLeftZ;
 
 
   //Gyro

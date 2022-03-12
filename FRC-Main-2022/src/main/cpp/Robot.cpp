@@ -121,6 +121,10 @@
 
     //Homing mode
 
+    JLeftZ = JLeft.GetZ() * 15;
+
+    frc::SmartDashboard::PutNumber("JLeft Z", JLeftZ);
+
     switch (homingState)
     {
     case automatic:
@@ -258,7 +262,7 @@
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
       targetDetect = table->GetBoolean("tv",false);
 
-      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal -4) / 20.0);
+      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + JLeftZ /*+ 8 - m_turretEncoder.GetPosition() * 12 / turretMax*/) / 20.0);
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
