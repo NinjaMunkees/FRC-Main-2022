@@ -102,6 +102,7 @@ class Robot : public frc::TimedRobot {
   enum gripState{gripOpening, gripClosing, gripStopped};
   gripState gripState;
   double gripMax;
+  double gripSpeed;
 
   //Turret
 
@@ -135,7 +136,7 @@ class Robot : public frc::TimedRobot {
   double shooterTargetSpeed = 0.5;
   double shooterFastSpeed = 0.75;
   const double shooterSlowSpeed = .25;
-  const double intakeTargetSpeed = -0.65;
+  const double intakeTargetSpeed = -0.8;
   const double TriggerSpeed = 0.1;
 
 

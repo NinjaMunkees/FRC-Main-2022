@@ -40,12 +40,6 @@
     table->PutNumber("ledMode", 3);
     table->PutNumber("camMode", 0);
 
-  //Grip code
-
-    gripStartPosition = m_climberEncoder.GetPosition();
-    gripState = gripStopped;
-    gripMax = gripStartPosition + 1.0;
-
   //Turret code
 
     m_turretEncoder.SetPosition(0);
@@ -183,7 +177,7 @@
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
-    if(m_ShooterRight->GetSelectedSensorVelocity() >= 5000 && m_timeToo.Get().value() >= 2){
+    if(m_timeToo.Get().value() >= 2.75){
       m_intake.Set(intakeTargetSpeed);
     }
 
@@ -201,7 +195,7 @@
     }
     }
 
-    if(m_time.Get().value() >= 3){
+    if(m_time.Get().value() >= 4){
     
       if(m_turretlimitSwitch.Get()){
         m_turretMotor.Set(0);
@@ -222,12 +216,19 @@
   void Robot::TeleopInit(){
     m_time.Stop();
     m_time.Reset();
+
+    //Grip code
+
+    gripStartPosition = 0;
+    m_gripEncoder.SetPosition(0);
+    gripState = gripStopped;
+    gripMax = gripStartPosition + 1.3;
   }
   
   void Robot::TeleopPeriodic()
   {
 
-    shooterFastSpeed = (JLeft.GetZ() + 1) * 0.25 + 0.5;
+    shooterFastSpeed = 0.6;  //(JLeft.GetZ() + 1) * 0.25 + 0.5;
 
     //Turret Code
 
@@ -351,12 +352,13 @@
       }
 
       gripPosition = m_gripEncoder.GetPosition();
+      gripSpeed = 0.1;
 
-      if(gripState == gripClosing && gripPosition <= gripMax){
-        m_climberGrip.Set(0.1);
+      if(gripState == gripClosing && gripPosition < gripMax){
+        m_climberGrip.Set(((gripMax - gripPosition) / gripMax) * gripSpeed + 0.05);
       }
-      else if(gripState == gripOpening && gripPosition >= gripStartPosition){
-        m_climberGrip.Set(-0.1);
+      else if(gripState == gripOpening && gripPosition > 0){
+        m_climberGrip.Set(((gripStartPosition - gripPosition) / gripMax) * gripSpeed - 0.05);
       }
       else{
         gripState = gripStopped;
