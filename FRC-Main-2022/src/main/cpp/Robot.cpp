@@ -228,7 +228,7 @@
   void Robot::TeleopPeriodic()
   {
 
-    shooterFastSpeed = 0.6;  //(JLeft.GetZ() + 1) * 0.25 + 0.5;
+    //shooterFastSpeed = 0.6;  //(JLeft.GetZ() + 1) * 0.25 + 0.5;
 
     //Turret Code
 
@@ -297,9 +297,25 @@
       if(buttonBoard.GetRawButton(11)){
         shooterTargetSpeed = 0;
         m_intake.Set(0.0); 
+        shooterAlive = false;
+      }
+      else if(JLeft.GetRawButton(8)){
+        shooterTargetSpeed = shooterSlowSpeed;
+      }
+      else if(JLeft.GetRawButton(9)){
+        shooterTargetSpeed = shooterFastSpeed;
       }
       else if(buttonBoard.GetRawButton(9)){
-        shooterTargetSpeed = shooterFastSpeed;
+        shooterTargetSpeed = shooterMidSpeed;
+        shooterAlive = true;
+      }
+      else{
+        if(shooterAlive == true){
+          shooterTargetSpeed = shooterMidSpeed;
+        }
+        else{
+          shooterTargetSpeed = 0;
+        }
       }
 
       if(buttonBoard.GetRawButtonPressed(10)){
@@ -311,6 +327,7 @@
 
       //The below color sensor code over-rides user input for shooter speed
 
+      /*
       if(detectedBallColor == RedBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
         shooterTargetSpeed = 0;
         m_time.Reset();
@@ -326,6 +343,7 @@
         m_time.Reset();
         shooterTargetSpeed = shooterFastSpeed;
       }
+      */
 
     // Climber winch code
 
