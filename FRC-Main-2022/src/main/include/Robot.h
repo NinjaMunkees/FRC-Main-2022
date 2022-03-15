@@ -20,10 +20,6 @@
 #include <frc/TimedRobot.h>
 #include <frc/drive/DifferentialDrive.h>
 
-//Gyro
-#include <cmath>
-#include <frc/ADIS16470_IMU.h>
-
 //Color Sensor
 #include "rev/ColorSensorV3.h"
 
