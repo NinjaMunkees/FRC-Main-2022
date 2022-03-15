@@ -181,7 +181,7 @@
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
-    if(m_timeToo.Get().value() >= 2.75){
+    if(m_timeToo.Get().value() >= 3){
       m_intake.Set(intakeTargetSpeed);
     }
 
@@ -262,8 +262,8 @@
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
       targetDetect = table->GetBoolean("tv",false);
 
-      //turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
-      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal + JLeftZ);
+      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
+      //turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal + JLeftZ);
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
