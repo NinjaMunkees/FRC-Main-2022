@@ -247,10 +247,23 @@
     {
     case automatic:
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+      targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
       targetDetect = table->GetBoolean("tv",false);
 
       turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
       //turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal + JLeftZ);
+
+      //auto speed
+
+      if(targetDetect == true && targetOffsetAngle_Vertical > targetMinY){
+        shooterTargetSpeed = 3500 - (8.4 - targetOffsetAngle_Vertical) * 150;
+      }
+      else if(targetDetect == true && targetOffsetAngle_Vertical > targetMaxY){
+        shooterTargetSpeed = shooterLowGoal;
+      }
+      else{
+        shooterTargetSpeed = 0;
+      }
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
@@ -298,6 +311,7 @@
         shooterTargetSpeed = 0;
         m_intake.Set(0.0); 
         shooterAlive = false;
+        intakeAlive = false;
       }
       else if(buttonBoard.GetRawButton(9)){
         shooterTargetSpeed = shooterMidSpeed;
@@ -313,11 +327,20 @@
       }
       */
 
-      if(buttonBoard.GetRawButtonPressed(10)){
-        m_intake.Set(intakeTargetSpeed);
+      if(buttonBoard.GetRawButtonPressed(10) || intakeAlive == true){
+          //m_intake.Set(intakeTargetSpeed);
+        intakeAlive = true;
       }
       else if(buttonBoard.GetRawButtonPressed(7)){
         m_intake.Set(intakeTargetSpeed * -1);
+      }
+
+      if(detectedBallColor == InvalidBall){
+        m_intake.Set(intakeTargetSpeed);
+        intakeAlive = false;
+      }
+      else{
+        m_intake.Set(0.0);
       }
 
       //The below color sensor code over-rides user input for shooter speed

@@ -137,8 +137,15 @@ class Robot : public frc::TimedRobot {
   const double intakeTargetSpeed = -0.8;
   const double TriggerSpeed = 0.1;
   bool shooterAlive;
+  bool intakeAlive;
   double sixSet = 6;
   double JLeftZ;
+
+  double shooterLowGoal = 3500;
+  double shooterAutoSpeedCurrent;
+  double targetMinY;
+  double targetMaxY;
+
 
 
   //Gyro
@@ -177,6 +184,7 @@ class Robot : public frc::TimedRobot {
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 
   double targetOffsetAngle_Horizontal;
+  double targetOffsetAngle_Vertical;
   bool targetDetect;
   double turretTargetSpeed;
 
