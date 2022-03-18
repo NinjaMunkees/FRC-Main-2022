@@ -16,6 +16,7 @@
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/DigitalInput.h>
 
 #include <frc/TimedRobot.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -129,10 +130,10 @@ class Robot : public frc::TimedRobot {
 
   //Shooter & Intake
   
-  double shooterTargetSpeed = 0.62;
-  double shooterMidSpeed = 0.7;
-  double shooterFastSpeed = 0.75;
-  const double shooterSlowSpeed = .25;
+  double shooterTargetSpeed = 2000 /*0.69*/;
+  double shooterMidSpeed = 2000;
+  double shooterFastSpeed = 22000;
+  const double shooterSlowSpeed = 5300;
   const double intakeTargetSpeed = -0.8;
   const double TriggerSpeed = 0.1;
   bool shooterAlive;

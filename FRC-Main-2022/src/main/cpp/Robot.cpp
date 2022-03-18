@@ -103,8 +103,8 @@
     shooterRightOutput = m_ShooterRight->GetSelectedSensorVelocity();
 
     frc::SmartDashboard::PutNumber("Right Shooter Velocity", shooterRightOutput);
+    frc::SmartDashboard::PutNumber("Shooter Target Speed", shooterTargetSpeed);
 
-    frc::SmartDashboard::PutNumber("Shooter High Speed", shooterFastSpeed);
 
     //Homing mode
 
@@ -162,8 +162,8 @@
 
     m_timeToo.Start();
         
-    m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
-    m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
+    m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
+    m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
 
     shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
     shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
@@ -198,8 +198,8 @@
         m_turretMotor.Set(0.1);
         m_intake.Set(0);
       }
-        m_ShooterRight->Set(ControlMode::PercentOutput, 0);
-        m_ShooterLeft->Set(ControlMode::PercentOutput, 0);
+        m_ShooterRight->Set(ControlMode::Velocity, 0);
+        m_ShooterLeft->Set(ControlMode::Velocity, 0);
         m_intake.Set(0);
     }
   }
@@ -286,29 +286,32 @@
 
     //Shooter & intake Code 
 
+      if(JLeft.GetRawButtonPressed(8)){
+      shooterTargetSpeed -= 100;
+      }
+      if(JLeft.GetRawButtonPressed(9)){
+        shooterTargetSpeed += 100;
+      }
+
       if(buttonBoard.GetRawButton(11)){
+        //shooterMidSpeed = shooterTargetSpeed;
         shooterTargetSpeed = 0;
         m_intake.Set(0.0); 
         shooterAlive = false;
-      }
-      else if(JLeft.GetRawButton(8)){
-        shooterTargetSpeed = shooterSlowSpeed;
-      }
-      else if(JLeft.GetRawButton(9)){
-        shooterTargetSpeed = shooterFastSpeed;
       }
       else if(buttonBoard.GetRawButton(9)){
         shooterTargetSpeed = shooterMidSpeed;
         shooterAlive = true;
       }
+      /*
       else{
         if(shooterAlive == true){
-          shooterTargetSpeed = shooterMidSpeed;
         }
         else{
           shooterTargetSpeed = 0;
         }
       }
+      */
 
       if(buttonBoard.GetRawButtonPressed(10)){
         m_intake.Set(intakeTargetSpeed);
@@ -320,13 +323,14 @@
       //The below color sensor code over-rides user input for shooter speed
 
       /*
+
       if(detectedBallColor == RedBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
-        shooterTargetSpeed = 0;
+        shooterTargetSpeed = 0.1;
         m_time.Reset();
         m_time.Start();
       }
       else if(detectedBallColor == BlueBall && AllianceColor == frc::DriverStation::Alliance::kRed){
-        shooterTargetSpeed = 0;
+        shooterTargetSpeed = 0.1;
         m_time.Reset();
         m_time.Start();
       }
@@ -385,8 +389,8 @@
         homingDone = true;
       }
     }
-    m_ShooterLeft->Set(ControlMode::PercentOutput, shooterTargetSpeed * -1);
-    m_ShooterRight->Set(ControlMode::PercentOutput, shooterTargetSpeed);
+    m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+    m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
   }
 
   void Robot::TestPeriodic(){
