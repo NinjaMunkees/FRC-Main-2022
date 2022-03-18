@@ -255,8 +255,13 @@
 
       //auto speed
 
-      if(targetDetect == true && targetOffsetAngle_Vertical > targetMinY){
-        shooterTargetSpeed = 3500 - (8.4 - targetOffsetAngle_Vertical) * 150;
+      if(targetDetect == true /*&& targetOffsetAngle_Vertical > targetMinY*/){
+        shooterAlive = true;
+        shooterAutoSpeedCurrent = 3500 - (8.4 - targetOffsetAngle_Vertical) * 150;
+        shooterTargetSpeed = shooterAutoSpeedCurrent;
+        m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+        m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
+        
       }
       else if(targetDetect == true && targetOffsetAngle_Vertical > targetMaxY){
         shooterTargetSpeed = shooterLowGoal;
@@ -328,13 +333,13 @@
       */
 
       if(buttonBoard.GetRawButtonPressed(10) || intakeAlive == true){
-          //m_intake.Set(intakeTargetSpeed);
-        intakeAlive = true;
+        m_intake.Set(intakeTargetSpeed);
       }
       else if(buttonBoard.GetRawButtonPressed(7)){
         m_intake.Set(intakeTargetSpeed * -1);
       }
 
+      /*
       if(detectedBallColor == InvalidBall){
         m_intake.Set(intakeTargetSpeed);
         intakeAlive = false;
@@ -342,6 +347,7 @@
       else{
         m_intake.Set(0.0);
       }
+      */
 
       //The below color sensor code over-rides user input for shooter speed
 

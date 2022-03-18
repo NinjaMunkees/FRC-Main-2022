@@ -143,8 +143,9 @@ class Robot : public frc::TimedRobot {
 
   double shooterLowGoal = 3500;
   double shooterAutoSpeedCurrent;
-  double targetMinY;
-  double targetMaxY;
+  double targetMinY = -18;
+  double targetMaxY = 4.0;
+  bool readyToShoot;
 
 
 
