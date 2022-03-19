@@ -127,7 +127,7 @@
       break;
     }
 
-        switch (gripState)
+    switch (gripState)
     {
     case gripOpening:
       frc::SmartDashboard::PutString("Grip State", "Opening");
@@ -217,6 +217,8 @@
     m_gripEncoder.SetPosition(0);
     gripState = gripStopped;
     gripMax = gripStartPosition + 1.3;
+
+    intakeMode = autoIntake;
   }
   
   void Robot::TeleopPeriodic()
@@ -235,6 +237,7 @@
 
     if(homingDone == true && buttonBoard.GetRawButtonPressed(3)){
       homingState = automatic;
+      intakeMode = autoIntake;
     }
     
     if(buttonBoard.GetRawButtonPressed(4) || buttonBoard.GetRawButtonPressed(8) || buttonBoard.GetRawButtonPressed(11)){
@@ -317,10 +320,10 @@
 
       if(buttonBoard.GetRawButton(11)){
         //shooterMidSpeed = shooterTargetSpeed;
-        shooterTargetSpeed = 0;
-        m_intake.Set(0.0); 
+        shooterTargetSpeed = 0.0;
+        intakeTargetSpeed = 0.0; 
         shooterAlive = false;
-        intakeAlive = false;
+        intakeMode = manualIntake;
       }
       else if(buttonBoard.GetRawButton(9)){
         shooterTargetSpeed = shooterMidSpeed;
@@ -336,22 +339,23 @@
       }
       */
 
-      if(buttonBoard.GetRawButtonPressed(10) || intakeAlive == true){
-        m_intake.Set(intakeTargetSpeed);
+      if(buttonBoard.GetRawButtonPressed(10)){
+        intakeMode = manualIntake;
+        intakeTargetSpeed = intakeFastSpeed;
       }
       else if(buttonBoard.GetRawButtonPressed(7)){
-        m_intake.Set(intakeTargetSpeed * -1);
+        intakeMode = manualIntake;
+        intakeTargetSpeed = intakeFastSpeed * -1.0;
       }
 
-      /*
       if(detectedBallColor == InvalidBall){
         m_intake.Set(intakeTargetSpeed);
-        intakeAlive = false;
       }
       else{
         m_intake.Set(0.0);
       }
-      */
+
+
 
       //The below color sensor code over-rides user input for shooter speed
 
@@ -422,6 +426,8 @@
         homingDone = true;
       }
     }
+    m_intake.Set(intakeTargetSpeed);
+
     m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
     m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
   }
