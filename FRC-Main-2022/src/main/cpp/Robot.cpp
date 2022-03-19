@@ -141,6 +141,9 @@
     default:
       break;
     }
+
+    frc::SmartDashboard::PutNumber("Limelight y +25", targetOffsetAngle_Vertical);
+
   }
 
   void Robot::AutonomousInit(){
@@ -247,23 +250,24 @@
     {
     case automatic:
       targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-      targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
-      targetDetect = table->GetBoolean("tv",false);
+      targetOffsetAngle_Vertical = table->GetNumber("ty",0.0) + 25.0;
+      targetDetect = table->GetNumber("tv",false);
 
-      turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
+      //turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
       //turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal + JLeftZ);
+      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 20.0);
+
 
       //auto speed
 
-      if(targetDetect == true /*&& targetOffsetAngle_Vertical > targetMinY*/){
+      if(targetDetect == 1.000 && targetOffsetAngle_Vertical > targetMinY){
         shooterAlive = true;
-        shooterAutoSpeedCurrent = 3500 - (8.4 - targetOffsetAngle_Vertical) * 150;
+        shooterAutoSpeedCurrent = 8300 - 125 * targetOffsetAngle_Vertical;
         shooterTargetSpeed = shooterAutoSpeedCurrent;
-        m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
-        m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
-        
+        //m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+        //m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
       }
-      else if(targetDetect == true && targetOffsetAngle_Vertical > targetMaxY){
+      else if(targetDetect == 1.000 && targetOffsetAngle_Vertical > targetMaxY){
         shooterTargetSpeed = shooterLowGoal;
       }
       else{
