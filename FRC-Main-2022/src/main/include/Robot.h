@@ -88,6 +88,7 @@ class Robot : public frc::TimedRobot {
   rev::SparkMaxRelativeEncoder m_frontLeftEncoder = m_frontLeftMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_rearLeftEncoder = m_rearLeftMotor.GetEncoder();
 
+  rev::SparkMaxRelativeEncoder m_intakeEncoder = m_intake.GetEncoder();
   rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
@@ -134,18 +135,25 @@ class Robot : public frc::TimedRobot {
   double shooterMidSpeed = 2000;
   double shooterFastSpeed = 22000;
   const double shooterSlowSpeed = 5300;
-  const double intakeTargetSpeed = -0.8;
+  double intakeBackup;
+  double intakeTargetSpeed = -0.8;
+  const double intakeFastSpeed = -0.8;
+  const double intakeReverse = 0.8;
   const double TriggerSpeed = 0.1;
   bool shooterAlive;
   bool intakeAlive;
-  double sixSet = 6;
+  bool ballChambered = false;
+  bool ballDelayed = false;
   double JLeftZ;
+  frc::Timer m_intakeReverseDelay;
 
   double shooterLowGoal = 3500;
   double shooterAutoSpeedCurrent;
   double targetMinY = 7.0;
   double targetMaxY = 29.0;
-  bool readyToShoot;
+  bool readyToShoot = false;
+  enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
+  intakeMode intakeMode;
 
 
 

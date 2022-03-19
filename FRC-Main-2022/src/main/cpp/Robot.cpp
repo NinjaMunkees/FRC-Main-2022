@@ -105,6 +105,10 @@
     frc::SmartDashboard::PutNumber("Right Shooter Velocity", shooterRightOutput);
     frc::SmartDashboard::PutNumber("Shooter Target Speed", shooterTargetSpeed);
 
+    frc::SmartDashboard::PutNumber("intake delay timer", m_intakeReverseDelay.Get().value());
+    frc::SmartDashboard::PutBoolean("ball delay", ballDelayed);
+    frc::SmartDashboard::PutBoolean("ball chambered", ballChambered);
+    frc::SmartDashboard::PutNumber("intake position", m_intakeEncoder.GetPosition());
 
     //Homing mode
 
@@ -426,6 +430,45 @@
         homingDone = true;
       }
     }
+
+    switch (intakeMode)
+    {
+    case autoIntake:  //manual control during auto intake will reset values for autoIntake
+      if(ballDelayed){
+          if(m_intakeEncoder.GetPosition() >= intakeBackup){
+            readyToShoot = true;
+            intakeTargetSpeed = 0.0;
+        }
+      }
+      else if(ballChambered){
+        if(m_intakeReverseDelay.Get().value() > 1){
+          ballDelayed = true;
+          intakeBackup = m_intakeEncoder.GetPosition() + 6;
+          intakeTargetSpeed = intakeReverse;
+        }
+      }
+      else if(detectedBallColor != InvalidBall){
+        ballChambered = true;
+        intakeTargetSpeed = 0.0;
+        m_intakeReverseDelay.Reset();
+        m_intakeReverseDelay.Start();
+      }
+      else if(detectedBallColor == InvalidBall){
+        intakeTargetSpeed = intakeFastSpeed;
+      }
+      break;
+    case manualIntake:
+      ballChambered = false;
+      readyToShoot = false;
+      ballDelayed = false;
+      break;
+    case intakeFire:
+
+      break;
+    default:
+      break;
+    }
+
     m_intake.Set(intakeTargetSpeed);
 
     m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
