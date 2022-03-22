@@ -158,6 +158,7 @@ class Robot : public frc::TimedRobot {
   enum shooterMode{manualSpeed, autoSpeed, stopSpeed};
   shooterMode shooterMode;
   bool timerStarted = false;
+  double intakeFireDelay = 0.5;
 
   //Gyro
 

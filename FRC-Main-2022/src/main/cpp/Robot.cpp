@@ -257,6 +257,8 @@
         shooterMode = autoSpeed;
         m_tim3r.Stop();
         m_tim3r.Reset();
+        m_timeToo.Stop();
+        m_timeToo.Reset();
         timerStarted = false;
       }
     }
@@ -440,7 +442,7 @@
         }
       }
       else if(ballChambered){
-        if(m_tim3r.Get().value() > 1){
+        if(m_tim3r.Get().value() > 0.5){
           ballDelayed = true;
           intakeBackup = m_intakeEncoder.GetPosition() + 6;
           intakeTargetSpeed = intakeReverse;
@@ -464,7 +466,7 @@
     case intakeFire:
       if(timerStarted){
         intakeTargetSpeed = intakeFastSpeed;
-        if(m_timeToo.Get().value() > 1.5){
+        if(m_timeToo.Get().value() > intakeFireDelay){
           intakeMode = autoIntake;
           ballChambered = false;
           readyToShoot = false;
@@ -504,12 +506,12 @@
       }
       else if(targetDetect == 1.000 && targetY > targetMaxY){
         shooterTargetSpeed = shooterLowGoal;
-      }
+      }  
       else{
         shooterTargetSpeed = shooterMidSpeed;
       }
       m_tim3r.Start();
-      if(m_timeToo.Get().value() > 1.5){
+      if(m_timeToo.Get().value() > intakeFireDelay){
         shooterMode = stopSpeed;
       }
       break;
