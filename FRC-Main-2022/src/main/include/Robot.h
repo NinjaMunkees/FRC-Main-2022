@@ -145,17 +145,19 @@ class Robot : public frc::TimedRobot {
   bool ballChambered = false;
   bool ballDelayed = false;
   double JLeftZ;
-  frc::Timer m_intakeReverseDelay;
+  frc::Timer m_tim3r;
 
   double shooterLowGoal = 3500;
   double shooterAutoSpeedCurrent;
   double targetMinY = 7.0;
   double targetMaxY = 29.0;
+  double targetMaxX = 4.0;
   bool readyToShoot = false;
   enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
   intakeMode intakeMode;
-
-
+  enum shooterMode{manualSpeed, autoSpeed, stopSpeed};
+  shooterMode shooterMode;
+  bool timerStarted = false;
 
   //Gyro
 
@@ -192,8 +194,10 @@ class Robot : public frc::TimedRobot {
 
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 
-  double targetOffsetAngle_Horizontal;
-  double targetOffsetAngle_Vertical;
+  double targetX;
+  double targetY;
+  bool targetXValid;
+  bool targetYValid;
   bool targetDetect;
   double turretTargetSpeed;
 

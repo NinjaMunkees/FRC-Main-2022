@@ -105,7 +105,7 @@
     frc::SmartDashboard::PutNumber("Right Shooter Velocity", shooterRightOutput);
     frc::SmartDashboard::PutNumber("Shooter Target Speed", shooterTargetSpeed);
 
-    frc::SmartDashboard::PutNumber("intake delay timer", m_intakeReverseDelay.Get().value());
+    frc::SmartDashboard::PutNumber("intake delay timer", m_tim3r.Get().value());
     frc::SmartDashboard::PutBoolean("ball delay", ballDelayed);
     frc::SmartDashboard::PutBoolean("ball chambered", ballChambered);
     frc::SmartDashboard::PutNumber("intake position", m_intakeEncoder.GetPosition());
@@ -145,8 +145,14 @@
     default:
       break;
     }
+    targetDetect = table->GetNumber("tv",0.0);
+    targetX = table->GetNumber("tx",0.0);
+    targetY = table->GetNumber("ty",0.0) + 25.0;
 
-    frc::SmartDashboard::PutNumber("Limelight y +25", targetOffsetAngle_Vertical);
+    targetYValid = (targetY > targetMinY && targetY < targetMaxY);
+    targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
+
+    frc::SmartDashboard::PutNumber("Limelight y +25", targetY);
 
   }
 
@@ -240,8 +246,19 @@
     turretPosition = m_turretEncoder.GetPosition();
 
     if(homingDone == true && buttonBoard.GetRawButtonPressed(3)){
-      homingState = automatic;
-      intakeMode = autoIntake;
+      if(readyToShoot == false){
+        homingState = automatic;
+        intakeMode = autoIntake;
+        shooterMode = stopSpeed;
+      }
+      else{
+        homingState = automatic;
+        intakeMode = intakeFire;
+        shooterMode = autoSpeed;
+        m_tim3r.Stop();
+        m_tim3r.Reset();
+        timerStarted = false;
+      }
     }
     
     if(buttonBoard.GetRawButtonPressed(4) || buttonBoard.GetRawButtonPressed(8) || buttonBoard.GetRawButtonPressed(11)){
@@ -256,30 +273,10 @@
     switch (homingState)
     {
     case automatic:
-      targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-      targetOffsetAngle_Vertical = table->GetNumber("ty",0.0) + 25.0;
-      targetDetect = table->GetNumber("tv",false);
 
-      //turretTargetSpeed = TriggerSpeed * ((targetOffsetAngle_Horizontal + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
-      //turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal + JLeftZ);
-      turretTargetSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 20.0);
-
-
-      //auto speed
-
-      if(targetDetect == 1.000 && targetOffsetAngle_Vertical > targetMinY){
-        shooterAlive = true;
-        shooterAutoSpeedCurrent = 8300 - 125 * targetOffsetAngle_Vertical;
-        shooterTargetSpeed = shooterAutoSpeedCurrent;
-        //m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
-        //m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
-      }
-      else if(targetDetect == 1.000 && targetOffsetAngle_Vertical > targetMaxY){
-        shooterTargetSpeed = shooterLowGoal;
-      }
-      else{
-        shooterTargetSpeed = 0;
-      }
+      //turretTargetSpeed = TriggerSpeed * ((targetX + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
+      //turretTargetSpeed = TriggerSpeed * (targetX + JLeftZ);
+      turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
@@ -328,10 +325,12 @@
         intakeTargetSpeed = 0.0; 
         shooterAlive = false;
         intakeMode = manualIntake;
+        shooterMode = manualSpeed;
       }
       else if(buttonBoard.GetRawButton(9)){
         shooterTargetSpeed = shooterMidSpeed;
         shooterAlive = true;
+        shooterMode = manualSpeed;
       }
       /*
       else{
@@ -441,7 +440,7 @@
         }
       }
       else if(ballChambered){
-        if(m_intakeReverseDelay.Get().value() > 1){
+        if(m_tim3r.Get().value() > 1){
           ballDelayed = true;
           intakeBackup = m_intakeEncoder.GetPosition() + 6;
           intakeTargetSpeed = intakeReverse;
@@ -450,8 +449,8 @@
       else if(detectedBallColor != InvalidBall){
         ballChambered = true;
         intakeTargetSpeed = 0.0;
-        m_intakeReverseDelay.Reset();
-        m_intakeReverseDelay.Start();
+        m_tim3r.Reset();
+        m_tim3r.Start();
       }
       else if(detectedBallColor == InvalidBall){
         intakeTargetSpeed = intakeFastSpeed;
@@ -463,7 +462,23 @@
       ballDelayed = false;
       break;
     case intakeFire:
-
+      if(timerStarted){
+        intakeTargetSpeed = intakeFastSpeed;
+        if(m_timeToo.Get().value() > 1.5){
+          intakeMode = autoIntake;
+          ballChambered = false;
+          readyToShoot = false;
+          ballDelayed = false;
+        }
+      }
+      else if(m_tim3r.Get().value() > 1.5 && targetDetect == 1.000 && targetYValid && targetXValid){
+        intakeTargetSpeed = intakeFastSpeed;
+        if(!timerStarted){
+          m_timeToo.Reset();
+          m_timeToo.Start();
+          timerStarted = true;
+        }
+      }
       break;
     default:
       break;
@@ -471,18 +486,49 @@
 
     m_intake.Set(intakeTargetSpeed);
 
+    switch (shooterMode)
+    {
+    case stopSpeed:
+      shooterTargetSpeed = 0;
+      break;
+    case manualSpeed:
+      break;
+    case autoSpeed:
+      
+      //auto speed
+
+      if(targetDetect == 1.000 && targetY > targetMinY){
+        shooterAlive = true;
+        shooterAutoSpeedCurrent = 8300 - 125 * targetY;
+        shooterTargetSpeed = shooterAutoSpeedCurrent;
+      }
+      else if(targetDetect == 1.000 && targetY > targetMaxY){
+        shooterTargetSpeed = shooterLowGoal;
+      }
+      else{
+        shooterTargetSpeed = shooterMidSpeed;
+      }
+      m_tim3r.Start();
+      if(m_timeToo.Get().value() > 1.5){
+        shooterMode = stopSpeed;
+      }
+      break;
+    default:
+      break;
+    }
+
     m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
     m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
   }
 
   void Robot::TestPeriodic(){
     
-    double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+    double targetX = table->GetNumber("tx",0.0);
     bool targetDetect = table->GetBoolean("tv",false);
 
-    double visionSpeed = TriggerSpeed * (targetOffsetAngle_Horizontal / 30.0);
+    double visionSpeed = TriggerSpeed * (targetX / 30.0);
 
-    frc::SmartDashboard::PutNumber("Vision Horizontal Offset", targetOffsetAngle_Horizontal);
+    frc::SmartDashboard::PutNumber("Vision Horizontal Offset", targetX);
     frc::SmartDashboard::PutNumber("Turret Speed for Vision", visionSpeed);
 
     m_turretMotor.Set(visionSpeed);
