@@ -149,16 +149,24 @@ class Robot : public frc::TimedRobot {
 
   double shooterLowGoal = 3500;
   double shooterAutoSpeedCurrent;
-  double targetMinY = 7.0;
-  double targetMaxY = 29.0;
-  double targetMaxX = 4.0;
-  bool readyToShoot = false;
+  double targetMinY = 7.0; //minimum limelight y value for auto shooting
+  double targetMaxY = 29.0; //maximum limelight y value for auto shooting
+  double targetMaxX = 30.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
+  bool readyToShoot = false; 
   enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
   intakeMode intakeMode;
   enum shooterMode{manualSpeed, autoSpeed, stopSpeed};
   shooterMode shooterMode;
   bool timerStarted = false;
   double intakeFireDelay = 0.5;
+
+  //off-sets for auto aim (horizontal)
+  double offsetAdditionX = -10.0;
+  double offsetMultiplyX = -5.0;
+
+  //shooter regions
+  enum shooterRegion{shooterRight, shooterCenter, shooterLeft};
+  shooterRegion shooterRegion;
 
   //Gyro
 

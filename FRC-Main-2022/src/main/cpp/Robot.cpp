@@ -88,11 +88,37 @@
       
     }
 
+    //shooter regions
+
+    if(m_turretEncoder.GetPosition() > -4.25){
+      shooterRegion = shooterRight;
+    }
+    else if(m_turretEncoder.GetPosition() < -4.25 && m_turretEncoder.GetPosition() > -8.5){
+      shooterRegion = shooterCenter;
+    }
+    else{
+      shooterRegion = shooterLeft;
+    }
+
     //Encoders
 
     frc::SmartDashboard::PutNumber("Grip Encoder Position", m_gripEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
+
+        switch (shooterRegion)
+    {
+      case shooterLeft:
+           frc::SmartDashboard::PutString("shooterRegion", "Left");
+           break;
+      case shooterCenter:
+           frc::SmartDashboard::PutString("shooterRegion", "Center");
+           break;
+      case shooterRight:
+           frc::SmartDashboard::PutString("shooterRegion", "Right");
+           break;
+    }
+
 
     //Limit switch
 
@@ -109,6 +135,9 @@
     frc::SmartDashboard::PutBoolean("ball delay", ballDelayed);
     frc::SmartDashboard::PutBoolean("ball chambered", ballChambered);
     frc::SmartDashboard::PutNumber("intake position", m_intakeEncoder.GetPosition());
+
+    frc::SmartDashboard::PutNumber("off-set addition", offsetAdditionX);
+    frc::SmartDashboard::PutNumber("off-set multipier", offsetMultiplyX);
 
     //Homing mode
 
@@ -277,13 +306,14 @@
     case automatic:
 
       //turretTargetSpeed = TriggerSpeed * ((targetX + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
+      turretTargetSpeed = TriggerSpeed * ((targetX + offsetAdditionX - m_turretEncoder.GetPosition() * offsetMultiplyX / turretMax) / 20.0);
       //turretTargetSpeed = TriggerSpeed * (targetX + JLeftZ);
-      turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+      //turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
       }
-      else if(m_turretEncoder.GetPosition() < 0 && turretTargetSpeed > 0){
+      else if(m_turretEncoder.GetPosition() < -1.0 && turretTargetSpeed > 0){
         m_turretMotor.Set(turretTargetSpeed);
       }
       break;
