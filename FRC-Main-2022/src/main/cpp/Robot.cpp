@@ -125,7 +125,7 @@
 
     frc::SmartDashboard::PutNumber("off set left turret addition", offsetLeftTurretAimAddition);
     frc::SmartDashboard::PutNumber("off set center turret addition", offsetCenterTurretAimAddition);
-    frc::SmartDashboard::PutNumber("off set right turret addition", offsetRightShooterSpeedAddition);
+    frc::SmartDashboard::PutNumber("off set right turret addition", offsetRightTurretAimAddition);
 
 
     //Limit switch
@@ -523,7 +523,7 @@
       break;
     case intakeFire:
       if(timerStarted){
-        intakeTargetSpeed = intakeFastSpeed;
+        intakeTargetSpeed = intakeFeedSpeed;
         if(m_timeToo.Get().value() > intakeFireDelay){
           intakeMode = autoIntake;
           ballChambered = false;
