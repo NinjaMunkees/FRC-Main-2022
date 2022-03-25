@@ -119,6 +119,14 @@
            break;
     }
 
+    frc::SmartDashboard::PutNumber("off set left third addition", offsetLeftShooterSpeedAddition);
+    frc::SmartDashboard::PutNumber("off set center third addition", offsetCenterShooterSpeedAddition);
+    frc::SmartDashboard::PutNumber("off set right third addition", offsetRightShooterSpeedAddition);
+
+    frc::SmartDashboard::PutNumber("off set left turret addition", offsetLeftTurretAimAddition);
+    frc::SmartDashboard::PutNumber("off set center turret addition", offsetCenterTurretAimAddition);
+    frc::SmartDashboard::PutNumber("off set right turret addition", offsetRightShooterSpeedAddition);
+
 
     //Limit switch
 
@@ -318,15 +326,15 @@
       {
       case shooterRight:
         turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
-        offsetAdditionY = offsetRightAddition;
+        offsetAdditionY = offsetRightShooterSpeedAddition;
         break;
       case shooterCenter:
         turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
-        offsetAdditionY = offsetCenterAddition;
+        offsetAdditionY = offsetCenterShooterSpeedAddition;
         break;
       case shooterLeft:
         turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
-        offsetAdditionY = offsetLeftAddition;
+        offsetAdditionY = offsetLeftShooterSpeedAddition;
         break;
       default:
         break;

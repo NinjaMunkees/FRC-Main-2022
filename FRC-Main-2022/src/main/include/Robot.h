@@ -165,12 +165,16 @@ class Robot : public frc::TimedRobot {
   //off-sets for auto aim (horizontal)
   double offsetAdditionX = -10.0;
   double offsetMultiplyX = -5.0;
+  double offsetLeftTurretAimAddition;
+  double offsetCenterTurretAimAddition;
+  double offsetRightTurretAimAddition;
+
 
   //offsets for auto speed based on turret location
 
-  const double offsetLeftAddition = 100; //offset for left-most third of turret rotation
-  const double offsetCenterAddition = 100; //offset for center-most third of turret rotation
-  const double offsetRightAddition = 100; //offset for right-most third of turret rotation
+  double offsetLeftShooterSpeedAddition = 100; //offset for left-most third of turret rotation
+  double offsetCenterShooterSpeedAddition = 100; //offset for center-most third of turret rotation
+  double offsetRightShooterSpeedAddition = 100; //offset for right-most third of turret rotation
   double offsetAdditionY;
 
   //shooter regions
