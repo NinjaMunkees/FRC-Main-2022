@@ -174,6 +174,9 @@
     default:
       break;
     }
+
+//limelight table data
+
     targetDetect = table->GetNumber("tv",0.0);
     targetX = table->GetNumber("tx",0.0);
     targetY = table->GetNumber("ty",0.0) + 25.0;
@@ -306,9 +309,28 @@
     case automatic:
 
       //turretTargetSpeed = TriggerSpeed * ((targetX + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
-      turretTargetSpeed = TriggerSpeed * ((targetX + offsetAdditionX - m_turretEncoder.GetPosition() * offsetMultiplyX / turretMax) / 20.0);
+      //turretTargetSpeed = TriggerSpeed * ((targetX + offsetAdditionX - m_turretEncoder.GetPosition() * offsetMultiplyX / turretMax) / 20.0);
       //turretTargetSpeed = TriggerSpeed * (targetX + JLeftZ);
       //turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+
+      
+      switch (shooterRegion)
+      {
+      case shooterRight:
+        turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+        offsetAdditionY = offsetRightAddition;
+        break;
+      case shooterCenter:
+        turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+        offsetAdditionY = offsetCenterAddition;
+        break;
+      case shooterLeft:
+        turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+        offsetAdditionY = offsetLeftAddition;
+        break;
+      default:
+        break;
+      }
     
       if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
         m_turretMotor.Set(turretTargetSpeed);
@@ -390,8 +412,6 @@
         m_intake.Set(0.0);
       }
 
-
-
       //The below color sensor code over-rides user input for shooter speed
 
       /*
@@ -471,25 +491,25 @@
             intakeTargetSpeed = 0.0;
         }
       }
-      else if(ballChambered){
+      else if(ballChambered){ //reverses the intake for auto-intake mode
         if(m_tim3r.Get().value() > 0.5){
           ballDelayed = true;
           intakeBackup = m_intakeEncoder.GetPosition() + 6;
           intakeTargetSpeed = intakeReverse;
         }
       }
-      else if(detectedBallColor != InvalidBall){
+      else if(detectedBallColor != InvalidBall){ //does nothing if we have no ball
         ballChambered = true;
         intakeTargetSpeed = 0.0;
         m_tim3r.Reset();
         m_tim3r.Start();
       }
-      else if(detectedBallColor == InvalidBall){
+      else if(detectedBallColor == InvalidBall){ //sets the intake back to auto-intake mode (will intake then chamber one ball) mode
         intakeTargetSpeed = intakeFastSpeed;
       }
       break;
     case manualIntake:
-      ballChambered = false;
+      ballChambered = false; //do we have a ball chambered in the intake
       readyToShoot = false;
       ballDelayed = false;
       break;
@@ -516,7 +536,7 @@
       break;
     }
 
-    m_intake.Set(intakeTargetSpeed);
+    m_intake.Set(intakeTargetSpeed); //sets the speed based on any assignments further up
 
     switch (shooterMode)
     {
@@ -531,7 +551,7 @@
 
       if(targetDetect == 1.000 && targetY > targetMinY){
         shooterAlive = true;
-        shooterAutoSpeedCurrent = 8300 - 125 * targetY;
+        shooterAutoSpeedCurrent = 8300 - 125 + offsetAdditionY * targetY;
         shooterTargetSpeed = shooterAutoSpeedCurrent;
       }
       else if(targetDetect == 1.000 && targetY > targetMaxY){
@@ -548,6 +568,8 @@
     default:
       break;
     }
+
+    //sets the speed based on any assignments further up
 
     m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
     m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
