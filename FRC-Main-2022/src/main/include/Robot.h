@@ -61,6 +61,13 @@ class Robot : public frc::TimedRobot {
 
  private:
 
+  //Funcions
+  void Turret();
+  void Shooter();
+  void Climber();
+  void Grip();
+  void Intake();
+
   //Motors
 
   rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
@@ -136,6 +143,7 @@ class Robot : public frc::TimedRobot {
   double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
   double shooterMidSpeed = 2000; //used when no auto adjusting speed
   double shooterFastSpeed = 22000; //currently un-used
+  const double shooterAutonomousSpeed = 5600; //probably wrong number
   const double shooterSlowSpeed = 5300; //currently un-used
   double intakeBackup; //controls how much to backup the intake in auto-intake mode
   double intakeTargetSpeed = -0.8; //current intake speed
@@ -148,20 +156,22 @@ class Robot : public frc::TimedRobot {
   bool ballChambered = false; //do we have a ball in the intake, used in ayto intake mode
   bool ballDelayed = false;
   double JLeftZ; //throttle on left flight-stick
-  frc::Timer m_tim3r; //timer
+  frc::Timer m_tim3r; //
+  
+  double autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
 
   double shooterLowGoal = 3500; //ideal speed for low goal
   double shooterAutoSpeedCurrent; //current speed for auto aim based on x and y values
   double targetMinY = 7.0; //minimum limelight y value for auto shooting
   double targetMaxY = 29.0; //maximum limelight y value for auto shooting
-  double targetMaxX = 30.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
+  double targetMaxX = 5.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
   bool readyToShoot = false; // done intaking and ready to shoot
   enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
   intakeMode intakeMode; // ^
   enum shooterMode{manualSpeed, autoSpeed, stopSpeed}; //run at set speed, speed controlled by y value, 0
   shooterMode shooterMode; //^
   bool timerStarted = false; 
-  double intakeFireDelay = 0.5; //delay for firing the ball in auto intake mode
+  double intakeFireDelay = 2.0                 ; //delay for firing the ball in auto intake mode
 
   //off-sets for auto aim (horizontal)
   double offsetAdditionX = -10.0; //currently un-used
