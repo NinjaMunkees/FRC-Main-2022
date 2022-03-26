@@ -64,6 +64,8 @@
     frc::SmartDashboard::PutNumber("ColorSensor.IR", IR);
     frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
 
+    //sets RGB thresh-hold for red and blue ball detection
+
     if(detectedColor.red >= 0.269){
       detectedBallColor = RedBall;
     }
@@ -73,6 +75,8 @@
     else{
       detectedBallColor = InvalidBall;
     }
+
+    //outputs ^ to driver-station
     
     switch (detectedBallColor)
     {
@@ -87,6 +91,22 @@
            break;
       
     }
+
+    //sets CorrectBall to either true or false depending on wether or not our ballcolor matches alliance color, ie. red && and red || blue && blue
+
+    if(detectedBallColor == BlueBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
+      CorrectBall = true;
+    }
+    else if(detectedBallColor == RedBall && AllianceColor == frc::DriverStation::Alliance::kRed){
+      CorrectBall = true;
+    }
+    else{
+      CorrectBall = true;
+    }
+
+    //outputs ^ to driver-station
+
+    frc::SmartDashboard::PutBoolean("Correct Color Ball", CorrectBall);
 
     //shooter regions
 
@@ -274,7 +294,7 @@
   void Robot::TeleopPeriodic()
   {
 
-    //shooterFastSpeed = 0.6;  //(JLeft.GetZ() + 1) * 0.25 + 0.5;
+    //shooterFastSpeed = 0.6;  //(JLeft.GetZ() + 1) * 0.25 + 0.5; //used to mod our speed based on left flight stick throttle, currently un-used
 
     //Turret Code
 
@@ -320,7 +340,6 @@
       //turretTargetSpeed = TriggerSpeed * ((targetX + offsetAdditionX - m_turretEncoder.GetPosition() * offsetMultiplyX / turretMax) / 20.0);
       //turretTargetSpeed = TriggerSpeed * (targetX + JLeftZ);
       //turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
-
       
       switch (shooterRegion)
       {
