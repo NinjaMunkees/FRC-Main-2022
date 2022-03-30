@@ -67,7 +67,7 @@ void Robot::RobotPeriodic()
   if(detectedColor.red >= 0.269){
     detectedBallColor = RedBall;
   }
-  else if(detectedColor.blue >= 0.32){
+  else if(detectedColor.blue >= 0.28){ //plz work
     detectedBallColor = BlueBall;
   }
   else{

@@ -149,7 +149,7 @@ class Robot : public frc::TimedRobot {
   double intakeBackup; //controls how much to backup the intake in auto-intake mode
   double intakeTargetSpeed = -0.8; //current intake speed
   const double intakeFastSpeed = -0.8; //speed for intake
-  const double intakeFeedSpeed = -0.15; //speed for feeding ball in auto aim
+  const double intakeFeedSpeed = -0.25; //speed for feeding ball in auto aim
   const double intakeReverse = 0.8; //reverse speed for intake
   const double TriggerSpeed = 0.1; //used to cancel out turret movement when attempting to move the turret both left and right
   bool shooterAlive;
