@@ -163,6 +163,8 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutNumber("off-set addition", offsetAdditionX);
   frc::SmartDashboard::PutNumber("off-set multipier", offsetMultiplyX);
 
+  frc::SmartDashboard::PutNumber("turret current speec", m_turretMotor.Get());
+
   //auto
   
   frc::SmartDashboard::PutNumber("Time 1", m_time.Get().value());
@@ -322,6 +324,15 @@ void Robot::TeleopPeriodic()
     //turretTargetSpeed = TriggerSpeed * ((targetX + offsetAdditionX - m_turretEncoder.GetPosition() * offsetMultiplyX / turretMax) / 20.0);
     //turretTargetSpeed = TriggerSpeed * (targetX + JLeftZ);
     //turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+    if(turretTargetSpeed <= -0.12){
+      turretTargetSpeed = -0.12;
+    }
+    else if(turretTargetSpeed >= 0.12){
+      turretTargetSpeed = 0,12;
+    }
+    if(m_turretEncoder.GetPosition() < turretMax || m_turretEncoder.GetPosition() > -3.0){
+      m_turretMotor.Set(0);
+    }
     
     switch (shooterRegion)
     {
@@ -330,11 +341,11 @@ void Robot::TeleopPeriodic()
       offsetAdditionY = offsetRightShooterSpeedAddition;
       break;
     case shooterCenter:
-      turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+      turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
       offsetAdditionY = offsetCenterShooterSpeedAddition;
       break;
     case shooterLeft:
-      turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+      turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
       offsetAdditionY = offsetLeftShooterSpeedAddition;
       break;
     default:
