@@ -65,7 +65,7 @@ class Robot : public frc::TimedRobot {
   void Turret();
   void Shooter();
   void Climber();
-  void Grip();
+  //void Grip();
   void Intake();
 
   //Motors
@@ -76,7 +76,7 @@ class Robot : public frc::TimedRobot {
   rev::CANSparkMax m_frontLeftMotor{3, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_rearLeftMotor{4, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
+  //rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_climberWinch{9, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
   TalonFX * m_ShooterRight;
@@ -96,7 +96,7 @@ class Robot : public frc::TimedRobot {
   rev::SparkMaxRelativeEncoder m_rearLeftEncoder = m_rearLeftMotor.GetEncoder();
 
   rev::SparkMaxRelativeEncoder m_intakeEncoder = m_intake.GetEncoder();
-  rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
+  //rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
 

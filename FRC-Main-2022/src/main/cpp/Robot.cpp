@@ -44,7 +44,7 @@ void Robot::RobotInit()
 
   m_turretEncoder.SetPosition(0);
   homingState = manual;
-  turretMax = -12;
+  turretMax = -11;
   homingDone = false;
 
 }
@@ -122,7 +122,7 @@ void Robot::RobotPeriodic()
 
   //Encoders
 
-  frc::SmartDashboard::PutNumber("Grip Encoder Position", m_gripEncoder.GetPosition());
+  //frc::SmartDashboard::PutNumber("Grip Encoder Position", m_gripEncoder.GetPosition());
   frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
   frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
 
@@ -194,6 +194,7 @@ void Robot::RobotPeriodic()
     break;
   }
 
+  /*
   switch (gripState)
   {
   case gripOpening:
@@ -208,6 +209,7 @@ void Robot::RobotPeriodic()
   default:
     break;
   }
+  */
 
 //limelight table data
 
@@ -237,21 +239,21 @@ void Robot::AutonomousInit(){
 
   autoDriven = false;
 
+  intakeTargetSpeed = 0;
+
 }
 
 void Robot::AutonomousPeriodic(){
   m_timeToo.Start();
-
-  shooterTargetSpeed = shooterMidSpeed;
       
-  m_ShooterRight->Set(ControlMode::Velocity, shooterTargetSpeed);
-  m_ShooterLeft->Set(ControlMode::Velocity, shooterTargetSpeed * -1);
+  m_ShooterRight->Set(ControlMode::Velocity, shooterMidSpeed);
+  m_ShooterLeft->Set(ControlMode::Velocity, shooterMidSpeed * -1);
 
   shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
   shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
 
   if(m_timeToo.Get().value() >= 3){
-    m_intake.Set(intakeTargetSpeed);
+    m_intake.Set(intakeFastSpeed);
   }
 
   if(m_frontRightEncoder.GetPosition() < frontRightMax && m_rearLeftEncoder.GetPosition() > rearLeftMax){
@@ -278,11 +280,12 @@ void Robot::AutonomousPeriodic(){
     }
     else{
       m_turretMotor.Set(0.1);
-      m_intake.Set(0);
+      //m_intake.Set(0);
+      intakeMode = manualIntake;
     }
       m_ShooterRight->Set(ControlMode::Velocity, 0);
       m_ShooterLeft->Set(ControlMode::Velocity, 0);
-      m_intake.Set(0);
+      intakeMode = manualIntake;
   }
 }
 
@@ -292,10 +295,12 @@ void Robot::TeleopInit(){
 
   //Grip code
 
+  /*
   gripStartPosition = 0;
   m_gripEncoder.SetPosition(0);
   gripState = gripStopped;
   gripMax = gripStartPosition + 1.3;
+  */
 
   intakeMode = autoIntake;
 }
@@ -371,7 +376,7 @@ void Robot::TeleopPeriodic()
     if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
       m_turretMotor.Set(turretTargetSpeed);
     }
-    else if(m_turretEncoder.GetPosition() < -2.0 && turretTargetSpeed > 0){
+    else if(m_turretEncoder.GetPosition() < -3.0 && turretTargetSpeed > 0){
       m_turretMotor.Set(turretTargetSpeed);
     }
     break;
@@ -471,7 +476,7 @@ void Robot::TeleopPeriodic()
 
     Climber();
     
-    Grip();
+    //Grip();
     
   //Homing code
 
@@ -494,7 +499,7 @@ void Robot::TeleopPeriodic()
       }
     }
     else if(ballChambered){ //reverses the intake for auto-intake mode
-      if(m_tim3r.Get().value() > 0.5){
+      if(m_tim3r.Get().value() >= 0.5){ //plz work
         ballDelayed = true;
         intakeBackup = m_intakeEncoder.GetPosition() + 6;
         intakeTargetSpeed = intakeReverse;
@@ -503,6 +508,7 @@ void Robot::TeleopPeriodic()
     else if(detectedBallColor != InvalidBall){
       ballChambered = true;
       intakeTargetSpeed = 0.0;
+      m_tim3r.Stop(); //plz work
       m_tim3r.Reset();
       m_tim3r.Start();
     }
@@ -603,6 +609,8 @@ void Robot::Climber(){
     m_climberWinch.Set(0.0);
   }
 }
+
+/*
 void Robot::Grip(){
   // Climber grip code
 
@@ -629,6 +637,7 @@ void Robot::Grip(){
     m_climberGrip.Set(0.0);
   }
 }
+*/
 
   //Destructor (Cleans up stuff)
 
