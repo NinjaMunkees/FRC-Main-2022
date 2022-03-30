@@ -215,6 +215,7 @@ class Robot : public frc::TimedRobot {
   bool targetYValid; //valid y range for limeligt, how close can we shoot from
   bool targetDetect; //do we see a valid target
   double turretTargetSpeed; //speed for the shooter, calculated off of x value
+  double turretAutoAimMaxSpeed; //maz speed for auto aim (horizontal)
 
   //limit switch code
 

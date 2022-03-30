@@ -326,7 +326,7 @@ void Robot::TeleopPeriodic()
     switch (shooterRegion)
     {
     case shooterRight:
-      turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
+      turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
       offsetAdditionY = offsetRightShooterSpeedAddition;
       break;
     case shooterCenter:
