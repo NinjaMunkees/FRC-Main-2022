@@ -143,6 +143,7 @@ class Robot : public frc::TimedRobot {
   double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
   double shooterMidSpeed = 2000; //used when no auto adjusting speed
   double shooterFastSpeed = 22000; //currently un-used
+  double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
   const double shooterAutonomousSpeed = 5600; //probably wrong number
   const double shooterSlowSpeed = 5300; //currently un-used
   double intakeBackup; //controls how much to backup the intake in auto-intake mode

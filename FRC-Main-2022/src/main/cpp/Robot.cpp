@@ -32,7 +32,6 @@ void Robot::RobotInit()
     case frc::DriverStation::Alliance::kInvalid:
           frc::SmartDashboard::PutString("AllianceColor", "?");
           break;
-    
   }
 
 //Limelight code
@@ -46,7 +45,6 @@ void Robot::RobotInit()
   homingState = manual;
   turretMax = -11;
   homingDone = false;
-
 }
 
 void Robot::RobotPeriodic()
@@ -89,7 +87,6 @@ void Robot::RobotPeriodic()
     case InvalidBall:
           frc::SmartDashboard::PutString("Detected Ball Color", "?");
           break;
-    
   }
 
   //sets CorrectBall to either true or false depending on wether or not our ballcolor matches alliance color, ie. red && and red || blue && blue
@@ -101,7 +98,7 @@ void Robot::RobotPeriodic()
     CorrectBall = true;
   }
   else{
-    CorrectBall = true;
+    CorrectBall = false;
   }
 
   //outputs ^ to driver-station
@@ -122,7 +119,6 @@ void Robot::RobotPeriodic()
 
   //Encoders
 
-  //frc::SmartDashboard::PutNumber("Grip Encoder Position", m_gripEncoder.GetPosition());
   frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
   frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
 
@@ -172,7 +168,6 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutNumber("Time 1", m_time.Get().value());
   frc::SmartDashboard::PutNumber("Time 1", m_timeToo.Get().value());
 
-
   //Homing mode
 
   JLeftZ = JLeft.GetZ() * 15;
@@ -193,23 +188,6 @@ void Robot::RobotPeriodic()
   default:
     break;
   }
-
-  /*
-  switch (gripState)
-  {
-  case gripOpening:
-    frc::SmartDashboard::PutString("Grip State", "Opening");
-      break;
-  case gripClosing:
-    frc::SmartDashboard::PutString("Grip State", "Closing");
-      break;
-  case gripStopped:
-    frc::SmartDashboard::PutString("Grip State", "Stopped");
-      break;
-  default:
-    break;
-  }
-  */
 
 //limelight table data
 
@@ -240,7 +218,6 @@ void Robot::AutonomousInit(){
   autoDriven = false;
 
   intakeTargetSpeed = 0;
-
 }
 
 void Robot::AutonomousPeriodic(){
@@ -292,15 +269,6 @@ void Robot::AutonomousPeriodic(){
 void Robot::TeleopInit(){
   m_time.Stop();
   m_time.Reset();
-
-  //Grip code
-
-  /*
-  gripStartPosition = 0;
-  m_gripEncoder.SetPosition(0);
-  gripState = gripStopped;
-  gripMax = gripStartPosition + 1.3;
-  */
 
   intakeMode = autoIntake;
 }
@@ -476,8 +444,6 @@ void Robot::TeleopPeriodic()
 
     Climber();
     
-    //Grip();
-    
   //Homing code
 
   if(homingState == manual){
@@ -610,36 +576,7 @@ void Robot::Climber(){
   }
 }
 
-/*
-void Robot::Grip(){
-  // Climber grip code
-
-  //grip open is 
-
-  if(buttonBoard.GetRawButtonPressed(6)){
-    gripState = gripOpening;
-  };
-  if(buttonBoard.GetRawButtonPressed(2)){
-    gripState = gripClosing;
-  }
-
-  gripPosition = m_gripEncoder.GetPosition();
-  gripSpeed = 0.1;
-
-  if(gripState == gripClosing && gripPosition < gripMax){
-    m_climberGrip.Set(((gripMax - gripPosition) / gripMax) * gripSpeed + 0.05);
-  }
-  else if(gripState == gripOpening && gripPosition > 0){
-    m_climberGrip.Set(((gripStartPosition - gripPosition) / gripMax) * gripSpeed - 0.05);
-  }
-  else{
-    gripState = gripStopped;
-    m_climberGrip.Set(0.0);
-  }
-}
-*/
-
-  //Destructor (Cleans up stuff)
+//Destructor (Cleans up stuff)
 
 Robot::~Robot(){
  delete m_ShooterLeft;
