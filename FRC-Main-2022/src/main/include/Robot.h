@@ -65,7 +65,6 @@ class Robot : public frc::TimedRobot {
   void Turret();
   void Shooter();
   void Climber();
-  //void Grip();
   void Intake();
 
   //Motors
@@ -76,7 +75,6 @@ class Robot : public frc::TimedRobot {
   rev::CANSparkMax m_frontLeftMotor{3, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_rearLeftMotor{4, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_intake{8, rev::CANSparkMax::MotorType::kBrushless};
-  //rev::CANSparkMax m_climberGrip{10, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax m_climberWinch{9, rev::CANSparkMax::MotorType::kBrushless};
   TalonFX * m_ShooterLeft;
   TalonFX * m_ShooterRight;
@@ -96,18 +94,8 @@ class Robot : public frc::TimedRobot {
   rev::SparkMaxRelativeEncoder m_rearLeftEncoder = m_rearLeftMotor.GetEncoder();
 
   rev::SparkMaxRelativeEncoder m_intakeEncoder = m_intake.GetEncoder();
-  //rev::SparkMaxRelativeEncoder m_gripEncoder = m_climberGrip.GetEncoder();
   rev::SparkMaxRelativeEncoder m_turretEncoder = m_turretMotor.GetEncoder();
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
-
-  //Grip (possibly deprecated)
-
-  double gripStartPosition; //start position for grip
-  double gripPosition; //current grip position
-  enum gripState{gripOpening, gripClosing, gripStopped};
-  gripState gripState; //^
-  double gripMax; //max grip position
-  double gripSpeed; //used in calculating grip ramp-up and ramp-down
 
   //Turret
 
@@ -143,7 +131,7 @@ class Robot : public frc::TimedRobot {
   double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
   double shooterMidSpeed = 2000; //used when no auto adjusting speed
   double shooterFastSpeed = 22000; //currently un-used
-  double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
+  const double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
   const double shooterAutonomousSpeed = 5600; //probably wrong number
   const double shooterSlowSpeed = 5300; //currently un-used
   double intakeBackup; //controls how much to backup the intake in auto-intake mode
@@ -157,7 +145,7 @@ class Robot : public frc::TimedRobot {
   bool ballChambered = false; //do we have a ball in the intake, used in ayto intake mode
   bool ballDelayed = false;
   double JLeftZ; //throttle on left flight-stick
-  frc::Timer m_tim3r; //
+  frc::Timer m_tim3r; //used in auto-intake, and intake-fire
   
   double autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
 
@@ -172,7 +160,7 @@ class Robot : public frc::TimedRobot {
   enum shooterMode{manualSpeed, autoSpeed, stopSpeed}; //run at set speed, speed controlled by y value, 0
   shooterMode shooterMode; //^
   bool timerStarted = false; 
-  double intakeFireDelay = 2.0                 ; //delay for firing the ball in auto intake mode
+  double intakeFireDelay = 2.0; //delay for firing the ball in auto intake mode
 
   //off-sets for auto aim (horizontal)
   double offsetAdditionX = -10.0; //currently un-used
@@ -187,7 +175,7 @@ class Robot : public frc::TimedRobot {
   double offsetLeftShooterSpeedAddition = 100; //offset for left-most third of turret rotation
   double offsetCenterShooterSpeedAddition = 100; //offset for center-most third of turret rotation
   double offsetRightShooterSpeedAddition = 100; //offset for right-most third of turret rotation
-  double offsetAdditionY;
+  double offsetAdditionY; // used to increase / decrese shooter speed in auto-aim based on wich section of the turrets rotation we are in, currently barely used
 
   //shooter regions
   enum shooterRegion{shooterRight, shooterCenter, shooterLeft}; //which third of the turrets range of motion are we currently in
@@ -219,7 +207,7 @@ class Robot : public frc::TimedRobot {
 
   //limit switch code
 
-  bool homingDone;
-  double turretEncoderStart;
+  bool homingDone; //has the yurret been homed
+  double turretEncoderStart; // start position of the turret
 
 };
