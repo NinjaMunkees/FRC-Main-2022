@@ -333,6 +333,10 @@ void Robot::TeleopPeriodic()
     if(m_turretEncoder.GetPosition() < turretMax || m_turretEncoder.GetPosition() > -3.0){
       m_turretMotor.Set(0);
     }
+
+    if(m_turretlimitSwitch.Get()){  //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
+      m_turretEncoder.SetPosition(0);
+    }
     
     switch (shooterRegion)
     {
