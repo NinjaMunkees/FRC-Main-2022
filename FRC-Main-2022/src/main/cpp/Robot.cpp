@@ -43,7 +43,7 @@ void Robot::RobotInit()
 
   m_turretEncoder.SetPosition(0);
   homingState = manual;
-  turretMax = -11;
+  turretMax = -13;
   homingDone = false;
 }
 
@@ -325,10 +325,6 @@ void Robot::TeleopPeriodic(){
     if(m_turretEncoder.GetPosition() < turretMax || m_turretEncoder.GetPosition() > -3.0){
       m_turretMotor.Set(0);
     }
-
-    if(m_turretlimitSwitch.Get()){  //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
-      m_turretEncoder.SetPosition(0);
-    }
     
     switch (shooterRegion)
     {
@@ -348,12 +344,14 @@ void Robot::TeleopPeriodic(){
       break;
     }
   
-    if(m_turretlimitSwitch.Get()){
+    if(m_turretlimitSwitch.Get()){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
       m_turretMotor.Set(0);
+      m_turretEncoder.SetPosition(0);
     }
     else if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
       m_turretMotor.Set(turretTargetSpeed);
     }
+
     /*
     else if(m_turretEncoder.GetPosition() < -3.0 && turretTargetSpeed > 0){ // may re-use on thur. if my changes don't work
       m_turretMotor.Set(turretTargetSpeed);
