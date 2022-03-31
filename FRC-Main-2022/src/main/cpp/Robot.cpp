@@ -34,12 +34,12 @@ void Robot::RobotInit()
           break;
   }
 
-//Limelight code
+  //Limelight code
 
   table->PutNumber("ledMode", 3);
   table->PutNumber("camMode", 0);
 
-//Turret code
+  //Turret code
 
   m_turretEncoder.SetPosition(0);
   homingState = manual;
@@ -143,7 +143,6 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutNumber("off set center turret addition", offsetCenterTurretAimAddition);
   frc::SmartDashboard::PutNumber("off set right turret addition", offsetRightTurretAimAddition);
 
-
   //Limit switch
 
   frc::SmartDashboard::PutBoolean("Turret Limit Switch Position", m_turretlimitSwitch.Get());
@@ -191,7 +190,7 @@ void Robot::RobotPeriodic()
     break;
   }
 
-//limelight table data
+  //limelight table data
 
   targetDetect = table->GetNumber("tv",0.0);
   targetX = table->GetNumber("tx",0.0);
@@ -275,17 +274,13 @@ void Robot::TeleopInit(){
   intakeMode = autoIntake;
 }
   
-void Robot::TeleopPeriodic()
-{
-
-  //shooterFastSpeed = 0.6;  //(JLeft.GetZ() + 1) * 0.25 + 0.5; //used to mod our speed based on left flight stick throttle, currently un-used
-
+void Robot::TeleopPeriodic(){
   //Turret Code
 
   double LeftTrigger = buttonBoard.GetRawButton(4);
   double RightTrigger = buttonBoard.GetRawButton(8);
 
-  double TurretSpeed = -1 * TriggerSpeed * LeftTrigger + RightTrigger * TriggerSpeed;
+  double TurretSpeed = -1 * TriggerSpeed * LeftTrigger + RightTrigger * TriggerSpeed; // makes sure if you try to turn the turret both left and right, it will cancel out and stop
 
   turretPosition = m_turretEncoder.GetPosition();
 
@@ -320,16 +315,13 @@ void Robot::TeleopPeriodic()
   {
   case automatic:
 
-    //turretTargetSpeed = TriggerSpeed * ((targetX + 8 - m_turretEncoder.GetPosition() * 12 / turretMax) / 20.0);
-    //turretTargetSpeed = TriggerSpeed * ((targetX + offsetAdditionX - m_turretEncoder.GetPosition() * offsetMultiplyX / turretMax) / 20.0);
-    //turretTargetSpeed = TriggerSpeed * (targetX + JLeftZ);
-    //turretTargetSpeed = TriggerSpeed * (targetX / 20.0);
     if(turretTargetSpeed <= -0.12){
       turretTargetSpeed = -0.12;
     }
     else if(turretTargetSpeed >= 0.12){
       turretTargetSpeed = 0,12;
     }
+
     if(m_turretEncoder.GetPosition() < turretMax || m_turretEncoder.GetPosition() > -3.0){
       m_turretMotor.Set(0);
     }
@@ -356,12 +348,18 @@ void Robot::TeleopPeriodic()
       break;
     }
   
-    if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
+    if(m_turretlimitSwitch.Get()){
+      m_turretMotor.Set(0);
+    }
+    else if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
       m_turretMotor.Set(turretTargetSpeed);
     }
-    else if(m_turretEncoder.GetPosition() < -3.0 && turretTargetSpeed > 0){
+    /*
+    else if(m_turretEncoder.GetPosition() < -3.0 && turretTargetSpeed > 0){ // may re-use on thur. if my changes don't work
       m_turretMotor.Set(turretTargetSpeed);
     }
+    */
+
     break;
   case manual:
     if(TurretSpeed > 0){
@@ -410,15 +408,6 @@ void Robot::TeleopPeriodic()
       shooterAlive = true;
       shooterMode = manualSpeed;
     }
-    /*
-    else{
-      if(shooterAlive == true){
-      }
-      else{
-        shooterTargetSpeed = 0;
-      }
-    }
-    */
 
     if(buttonBoard.GetRawButtonPressed(10)){
       intakeMode = manualIntake;
@@ -435,28 +424,7 @@ void Robot::TeleopPeriodic()
     else{
       m_intake.Set(0.0);
     }
-
-    //The below color sensor code over-rides user input for shooter speed
-
-    /*
-
-    if(detectedBallColor == RedBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
-      shooterTargetSpeed = 0.1;
-      m_time.Reset();
-      m_time.Start();
-    }
-    else if(detectedBallColor == BlueBall && AllianceColor == frc::DriverStation::Alliance::kRed){
-      shooterTargetSpeed = 0.1;
-      m_time.Reset();
-      m_time.Start();
-    }
-    if(m_time.Get().value() >= 1.5 && m_time.Get().value() < 1.6){
-      m_time.Stop();
-      m_time.Reset();
-      shooterTargetSpeed = shooterFastSpeed;
-    }
-    */
-
+ 
     Climber();
     
   //Homing code
