@@ -176,6 +176,7 @@ class Robot : public frc::TimedRobot {
   double offsetCenterShooterSpeedAddition = 100; //offset for center-most third of turret rotation
   double offsetRightShooterSpeedAddition = 100; //offset for right-most third of turret rotation
   double offsetAdditionY; // used to increase / decrese shooter speed in auto-aim based on wich section of the turrets rotation we are in, currently barely used
+  double yOffsetAutoAim; //used to compensate for over/under shooting
 
   //shooter regions
   enum shooterRegion{shooterRight, shooterCenter, shooterLeft}; //which third of the turrets range of motion are we currently in
@@ -199,6 +200,8 @@ class Robot : public frc::TimedRobot {
 
   double targetX; //current x offset for limelight, range approx. -30 to 30
   double targetY; //current y offset for limelight
+  double targetYTrue; //ACTUAL y offset for limelight
+  double targetYMaxInverted; // - 25 * -1
   bool targetXValid; //valid x range for limelight, what zone horizontally should score
   bool targetYValid; //valid y range for limeligt, how close can we shoot from
   bool targetDetect; //do we see a valid target

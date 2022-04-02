@@ -43,7 +43,7 @@ void Robot::RobotInit()
 
   m_turretEncoder.SetPosition(0);
   homingState = manual;
-  turretMax = -13;
+  turretMax = -12.5;
   homingDone = false;
 }
 
@@ -64,10 +64,10 @@ void Robot::RobotPeriodic()
 
   //sets RGB thresh-hold for red and blue ball detection
 
-  if(detectedColor.red >= 0.269){
+  if(detectedColor.red >= 0.29){
     detectedBallColor = RedBall;
   }
-  else if(detectedColor.blue >= 0.28){ //plz work
+  else if(detectedColor.blue >= 0.30){ //plz work
     detectedBallColor = BlueBall;
   }
   else{
@@ -190,11 +190,15 @@ void Robot::RobotPeriodic()
     break;
   }
 
+  frc::SmartDashboard::PutNumber("y Off-set addition", yOffsetAutoAim);
+  frc::SmartDashboard::PutNumber("shooterAutoSpeedCurrent", shooterAutoSpeedCurrent);
+
   //limelight table data
 
   targetDetect = table->GetNumber("tv",0.0);
   targetX = table->GetNumber("tx",0.0);
   targetY = table->GetNumber("ty",0.0) + 25.0;
+  targetYTrue = table->GetNumber("ty",0.0);
 
   targetYValid = (targetY > targetMinY && targetY < targetMaxY);
   targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
@@ -319,12 +323,20 @@ void Robot::TeleopPeriodic(){
       turretTargetSpeed = -0.12;
     }
     else if(turretTargetSpeed >= 0.12){
-      turretTargetSpeed = 0,12;
+      turretTargetSpeed = 0.12;
     }
 
-    if(m_turretEncoder.GetPosition() < turretMax || m_turretEncoder.GetPosition() > -3.0){
-      m_turretMotor.Set(0);
+    targetYMaxInverted = (targetYTrue - 25) * -1;
+
+    if(targetY <= 14){
+      yOffsetAutoAim = targetYMaxInverted * 120.0;
     }
+    else{
+      0;
+    }
+
+    //turretTargetSpeed = TriggerSpeed * (targetX / 19.0) + yOffsetAutoAim;
+
     
     switch (shooterRegion)
     {
@@ -344,11 +356,10 @@ void Robot::TeleopPeriodic(){
       break;
     }
   
-    if(m_turretlimitSwitch.Get()){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
+    if(m_turretlimitSwitch.Get() || m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
       m_turretMotor.Set(0);
-      m_turretEncoder.SetPosition(0);
     }
-    else if(turretTargetSpeed < 0 && m_turretEncoder.GetPosition() > turretMax){
+    else{
       m_turretMotor.Set(turretTargetSpeed);
     }
 
@@ -380,6 +391,9 @@ void Robot::TeleopPeriodic(){
     break;
   default:
     break;
+  }
+  if(m_turretlimitSwitch.Get()){
+    m_turretEncoder.SetPosition(0);
   }
 
   m_robotDrive.TankDrive(-JLeft.GetY()*0.85,-JRight.GetY()*0.85);
@@ -506,7 +520,7 @@ void Robot::TeleopPeriodic(){
 
     if(targetDetect == 1.000 && targetY > targetMinY){
       shooterAlive = true;
-      shooterAutoSpeedCurrent = 8300 - 125 + offsetAdditionY * targetY;
+      shooterAutoSpeedCurrent = (8300 - 125 + offsetAdditionY * targetY) + yOffsetAutoAim;
       shooterTargetSpeed = shooterAutoSpeedCurrent;
     }
     else if(targetDetect == 1.000 && targetY > targetMaxY){
