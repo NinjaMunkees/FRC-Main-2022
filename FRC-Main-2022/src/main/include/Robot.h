@@ -61,12 +61,6 @@ class Robot : public frc::TimedRobot {
 
  private:
 
-  //Funcions
-  void Turret();
-  void Shooter();
-  void Climber();
-  void Intake();
-
   //Motors
 
   rev::CANSparkMax m_turretMotor{7, rev::CANSparkMax::MotorType::kBrushless};
@@ -146,6 +140,12 @@ class Robot : public frc::TimedRobot {
   bool ballDelayed = false;
   double JLeftZ; //throttle on left flight-stick
   frc::Timer m_tim3r; //used in auto-intake, and intake-fire
+
+  //y ranges, and speed
+  float yTable[4] = {28.3, 19.7, 16.09, 12.48}; 
+  int speedTable[3][3] = {{4600, 4600 , 4600},
+                          {5300, 5300 ,5300},
+                        {11000, 11000 , 11000}};
   
   double autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
 
@@ -179,8 +179,11 @@ class Robot : public frc::TimedRobot {
   double yOffsetAutoAim; //used to compensate for over/under shooting
 
   //shooter regions
-  enum shooterRegion{shooterRight, shooterCenter, shooterLeft}; //which third of the turrets range of motion are we currently in
+  enum shooterRegion{shooterLeft, shooterCenter, shooterRight}; //which third of the turrets range of motion are we currently in
   shooterRegion shooterRegion;//^
+
+  //y Regions
+  enum yRegion{yClose, yMid, yFar, yOutOfBounds};
 
   //ColorSensorV3
 
@@ -211,7 +214,14 @@ class Robot : public frc::TimedRobot {
 
   //limit switch code
 
-  bool homingDone; //has the yurret been homed
+  bool homingDone; //has the turret been homed
   double turretEncoderStart; // start position of the turret
+
+  //Funcions
+  void Turret();
+  void Shooter();
+  void Climber();
+  void Intake();
+  yRegion GetYRegion();
 
 };

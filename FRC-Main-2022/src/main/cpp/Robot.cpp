@@ -438,7 +438,7 @@ void Robot::TeleopPeriodic(){
 
     if(buttonBoard.GetRawButtonPressed(10)){
       intakeMode = manualIntake;
-      intakeTargetSpeed = intakeFastSpeed;
+      intakeTargetSpeed = intakeFeedSpeed /*intakeFastSpeed*/;
     }
     else if(buttonBoard.GetRawButtonPressed(7)){
       intakeMode = manualIntake;
@@ -570,6 +570,34 @@ void Robot::TestPeriodic(){
   frc::SmartDashboard::PutNumber("Turret Speed for Vision", visionSpeed);
 
   m_turretMotor.Set(visionSpeed);
+
+}
+
+Robot::yRegion Robot::GetYRegion(){
+  //limelight table data
+
+  targetDetect = (table->GetNumber("tv",0.0) == 1.0);
+  targetY = table->GetNumber("ty",0.0) + 25.0;
+
+  if(!targetDetect)
+  {
+    return yOutOfBounds;
+  }
+  
+
+  if(targetY >= yRegion[0]){
+    return yOutOfBounds;
+  }
+  else if(targetY >= yRegion[1]){
+    return yClose;
+  }
+  else if(targetY >= yRegion[2]){
+    return yMid;
+  }
+  else if(targetY >= yRegion[3]){
+    return yFar;
+  }
+  return yOutOfBounds
 
 }
 void Robot::Climber(){ 
