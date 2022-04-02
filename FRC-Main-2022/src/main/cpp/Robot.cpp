@@ -34,6 +34,10 @@ void Robot::RobotInit()
           break;
   }
 
+  //modifiable variables
+
+  frc::SmartDashboard::PutNumber("shooterMidSpeed", shooterMidSpeed);
+
   //Limelight code
 
   table->PutNumber("ledMode", 3);
@@ -74,6 +78,13 @@ void Robot::RobotPeriodic()
     detectedBallColor = InvalidBall;
   }
 
+  if(proximity >= 420){
+    ballIntaken = true;
+  }
+  else{
+    ballIntaken = false;
+  }
+
   //outputs ^ to driver-station
   
   switch (detectedBallColor)
@@ -88,6 +99,8 @@ void Robot::RobotPeriodic()
           frc::SmartDashboard::PutString("Detected Ball Color", "?");
           break;
   }
+
+  frc::SmartDashboard::PutBoolean("ballIntaken", ballIntaken);
 
   //sets CorrectBall to either true or false depending on wether or not our ballcolor matches alliance color, ie. red && and red || blue && blue
 
@@ -192,6 +205,8 @@ void Robot::RobotPeriodic()
 
   frc::SmartDashboard::PutNumber("y Off-set addition", yOffsetAutoAim);
   frc::SmartDashboard::PutNumber("shooterAutoSpeedCurrent", shooterAutoSpeedCurrent);
+
+  shooterMidSpeed = frc::SmartDashboard::GetNumber("shooterMidSpeed", shooterMidSpeed);
 
   //limelight table data
 
@@ -335,7 +350,7 @@ void Robot::TeleopPeriodic(){
       0;
     }
 
-    //turretTargetSpeed = TriggerSpeed * (targetX / 19.0) + yOffsetAutoAim;
+    //turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
 
     
     switch (shooterRegion)
@@ -466,14 +481,14 @@ void Robot::TeleopPeriodic(){
         intakeTargetSpeed = intakeReverse;
       }
     }
-    else if(detectedBallColor != InvalidBall){
+    else if(ballIntaken){
       ballChambered = true;
       intakeTargetSpeed = 0.0;
       m_tim3r.Stop(); //plz work
       m_tim3r.Reset();
       m_tim3r.Start();
     }
-    else if(detectedBallColor == InvalidBall){
+    else if(ballIntaken == false){
       intakeTargetSpeed = intakeFastSpeed;
     }
     break;

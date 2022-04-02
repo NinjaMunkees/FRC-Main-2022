@@ -192,6 +192,7 @@ class Robot : public frc::TimedRobot {
 
   enum BallColor{RedBall, BlueBall, InvalidBall}; //which color ball do we have in our intake
   BallColor detectedBallColor;//^
+  bool ballIntaken = false; // tells off of IR from color sensor
   bool CorrectBall = false; //does our currently chambered ball match our alliance color
 
   //Limelight code 
