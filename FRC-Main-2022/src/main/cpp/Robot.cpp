@@ -17,7 +17,6 @@ void Robot::RobotInit()
   m_leftMotor.SetInverted(true);
 
   //ColorSensorV3
-
   detectedBallColor = InvalidBall;
 
   AllianceColor = frc::DriverStation::GetAlliance();
@@ -35,16 +34,13 @@ void Robot::RobotInit()
   }
 
   //modifiable variables
-
   frc::SmartDashboard::PutNumber("shooterMidSpeed", shooterMidSpeed);
 
   //Limelight code
-
   table->PutNumber("ledMode", 3);
   table->PutNumber("camMode", 0);
 
   //Turret code
-
   m_turretEncoder.SetPosition(0);
   homingState = manual;
   turretMax = -12.5;
@@ -55,7 +51,6 @@ void Robot::RobotPeriodic()
 {
   
   //ColorSensorV3
-
   frc::Color detectedColor = m_colorSensor.GetColor();
   double IR = m_colorSensor.GetIR();
   uint32_t proximity = m_colorSensor.GetProximity();
@@ -67,7 +62,6 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutNumber("ColorSensor.Proximity", proximity);
 
   //sets RGB thresh-hold for red and blue ball detection
-
   if(detectedColor.red >= 0.29){
     detectedBallColor = RedBall;
   }
@@ -86,7 +80,6 @@ void Robot::RobotPeriodic()
   }
 
   //outputs ^ to driver-station
-  
   switch (detectedBallColor)
   {
     case BlueBall:
@@ -103,7 +96,6 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutBoolean("ballIntaken", ballIntaken);
 
   //sets CorrectBall to either true or false depending on wether or not our ballcolor matches alliance color, ie. red && and red || blue && blue
-
   if(detectedBallColor == BlueBall && AllianceColor == frc::DriverStation::Alliance::kBlue){
     CorrectBall = true;
   }
@@ -115,11 +107,9 @@ void Robot::RobotPeriodic()
   }
 
   //outputs ^ to driver-station
-
   frc::SmartDashboard::PutBoolean("Correct Color Ball", CorrectBall);
 
   //shooter regions
-
   if(m_turretEncoder.GetPosition() > -4.25){
     shooterRegion = shooterRight;
   }
@@ -131,7 +121,6 @@ void Robot::RobotPeriodic()
   }
 
   //Encoders
-
   frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
   frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
 
@@ -157,11 +146,9 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutNumber("off set right turret addition", offsetRightTurretAimAddition);
 
   //Limit switch
-
   frc::SmartDashboard::PutBoolean("Turret Limit Switch Position", m_turretlimitSwitch.Get());
 
   //Shooter
-
   shooterRightOutput = m_ShooterRight->GetSelectedSensorVelocity();
 
   frc::SmartDashboard::PutNumber("Right Shooter Velocity", shooterRightOutput);
@@ -178,12 +165,10 @@ void Robot::RobotPeriodic()
   frc::SmartDashboard::PutNumber("turret current speec", m_turretMotor.Get());
 
   //auto
-  
   frc::SmartDashboard::PutNumber("Time 1", m_time.Get().value());
   frc::SmartDashboard::PutNumber("Time 1", m_timeToo.Get().value());
 
   //Homing mode
-
   JLeftZ = JLeft.GetZ() * 15;
 
   frc::SmartDashboard::PutNumber("JLeft Z", JLeftZ);
@@ -209,7 +194,6 @@ void Robot::RobotPeriodic()
   shooterMidSpeed = frc::SmartDashboard::GetNumber("shooterMidSpeed", shooterMidSpeed);
 
   //limelight table data
-
   targetDetect = table->GetNumber("tv",0.0);
   targetX = table->GetNumber("tx",0.0);
   targetY = table->GetNumber("ty",0.0) + 25.0;
@@ -351,8 +335,6 @@ void Robot::TeleopPeriodic(){
     }
 
     //turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
-
-    
     switch (shooterRegion)
     {
     case shooterRight:
@@ -377,12 +359,6 @@ void Robot::TeleopPeriodic(){
     else{
       m_turretMotor.Set(turretTargetSpeed);
     }
-
-    /*
-    else if(m_turretEncoder.GetPosition() < -3.0 && turretTargetSpeed > 0){ // may re-use on thur. if my changes don't work
-      m_turretMotor.Set(turretTargetSpeed);
-    }
-    */
 
     break;
   case manual:
@@ -413,8 +389,7 @@ void Robot::TeleopPeriodic(){
 
   m_robotDrive.TankDrive(-JLeft.GetY()*0.85,-JRight.GetY()*0.85);
 
-  //Shooter & intake Code 
-
+    //Shooter & intake Code 
     if(JLeft.GetRawButtonPressed(8)){
     shooterTargetSpeed -= 100;
     }
@@ -455,7 +430,6 @@ void Robot::TeleopPeriodic(){
     Climber();
     
   //Homing code
-
   if(homingState == manual){
 
     if(m_turretlimitSwitch.Get()){
@@ -532,7 +506,6 @@ void Robot::TeleopPeriodic(){
   case autoSpeed:
     
     //auto speed
-
     if(targetDetect == 1.000 && targetY > targetMinY){
       shooterAlive = true;
       shooterAutoSpeedCurrent = (8300 - 125 + offsetAdditionY * targetY) + yOffsetAutoAim;
@@ -597,7 +570,7 @@ Robot::yRegion Robot::GetYRegion(){
   else if(targetY >= yRegion[3]){
     return yFar;
   }
-  return yOutOfBounds
+  return yOutOfBounds;
 
 }
 void Robot::Climber(){ 

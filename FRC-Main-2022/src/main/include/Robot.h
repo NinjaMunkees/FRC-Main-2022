@@ -79,6 +79,7 @@ class Robot : public frc::TimedRobot {
   frc::Joystick JLeft{0};
   frc::Joystick JRight{1};
   frc::Joystick buttonBoard{2};
+  double JLeftZ; //throttle on left flight-stick
 
   //Encoders
 
@@ -92,54 +93,42 @@ class Robot : public frc::TimedRobot {
   rev::SparkMaxRelativeEncoder m_climberEncoder = m_climberWinch.GetEncoder();
 
   //Turret
-
   double turretStartPosition; //maybe deprecated
   double turretPosition; //current turret encoder position
   enum homingState{automatic, manual, homingOff}; //auto-aim, manual homing (can't rotate turret counter clock-wise untill limit switch has been tripped(turn the turret fully clock-wise)), homing finished(limits put in place)
   homingState homingState; //^
   double turretMax; //max position for turret (from limit switch), starts at 0 and goes to approx. -13
-
-  //Auto
-
-  double frontRightMax;
-  double rearRightMax;
-  double frontLeftMax;
-  double rearLeftMax;
-
-  //speeds for shooter motors, changes based on other variables
-
-  double shooterLeftOutput;
-  double shooterRightOutput;
-
-  frc::Timer m_time; //timer
-  frc::Timer m_timeToo; //timer
-
-  bool autoDriven; //has auto been run, this is a requirement to home in auto
-
-  //Limit switch
-
   frc::DigitalInput m_turretlimitSwitch {0};  //limit switch for turret
 
+  //Auto
+  double frontRightMax;
+  double rearLeftMax;
+  frc::Timer m_time; //timer
+  frc::Timer m_timeToo; //timer
+  bool autoDriven; //has auto been run, this is a requirement to home in auto
+
   //Shooter & Intake
-  
-  double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
-  double shooterMidSpeed = 2000; //used when no auto adjusting speed
-  double shooterFastSpeed = 22000; //currently un-used
-  const double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
-  const double shooterAutonomousSpeed = 5600; //probably wrong number
-  const double shooterSlowSpeed = 5300; //currently un-used
+  int shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
+  int shooterMidSpeed = 2000; //used when no auto adjusting speed
+  int shooterFastSpeed = 22000; //currently un-used
+  const int shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
+  const int shooterAutonomousSpeed = 5600; //probably wrong number
+  const int shooterSlowSpeed = 5300; //currently un-used
   double intakeBackup; //controls how much to backup the intake in auto-intake mode
-  double intakeTargetSpeed = -0.8; //current intake speed
-  const double intakeFastSpeed = -0.8; //speed for intake
-  const double intakeFeedSpeed = -0.25; //speed for feeding ball in auto aim
-  const double intakeReverse = 0.8; //reverse speed for intake
-  const double TriggerSpeed = 0.1; //used to cancel out turret movement when attempting to move the turret both left and right
-  bool shooterAlive;
-  bool intakeAlive;
+  float intakeTargetSpeed = -0.8; //current intake speed
+  const float intakeFastSpeed = -0.8; //speed for intake
+  const float intakeFeedSpeed = -0.25; //speed for feeding ball in auto aim
+  const float intakeReverse = 0.8; //reverse speed for intake
+  const float TriggerSpeed = 0.1; //used to cancel out turret movement when attempting to move the turret both left and right
+  bool shooterAlive; //currently not used *meaningly*
+  bool intakeAlive; //currently not used
   bool ballChambered = false; //do we have a ball in the intake, used in ayto intake mode
-  bool ballDelayed = false;
-  double JLeftZ; //throttle on left flight-stick
-  frc::Timer m_tim3r; //used in auto-intake, and intake-fire
+  bool ballDelayed = false; //has the ball been backed up and chabered
+  frc::Timer m_tim3r; //used in auto-intake, and intake-fire, specifically for backing up the intake to chamber a ball
+  
+  //speeds for shooter motors, changes based on other variables
+  int shooterLeftOutput;
+  int shooterRightOutput;
 
   //y ranges, and speed
   float yTable[4] = {28.3, 19.7, 16.09, 12.48}; 
@@ -147,19 +136,19 @@ class Robot : public frc::TimedRobot {
                           {5300, 5300 ,5300},
                         {11000, 11000 , 11000}};
   
-  double autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
+  float autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
 
-  double shooterLowGoal = 3500; //ideal speed for low goal
-  double shooterAutoSpeedCurrent; //current speed for auto aim based on x and y values
-  double targetMinY = 7.0; //minimum limelight y value for auto shooting
-  double targetMaxY = 29.0; //maximum limelight y value for auto shooting
-  double targetMaxX = 5.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
+  int shooterLowGoal = 3500; //ideal speed for low goal
+  int shooterAutoSpeedCurrent; //current speed for auto aim based on x and y values
+  float targetMinY = 7.0; //minimum limelight y value for auto shooting
+  float targetMaxY = 29.0; //maximum limelight y value for auto shooting
+  float targetMaxX = 5.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
   bool readyToShoot = false; // done intaking and ready to shoot
   enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
   intakeMode intakeMode; // ^
   enum shooterMode{manualSpeed, autoSpeed, stopSpeed}; //run at set speed, speed controlled by y value, 0
   shooterMode shooterMode; //^
-  bool timerStarted = false; 
+  bool timerStarted = false; //has m_timeToo been started for intake-fire mode
   double intakeFireDelay = 2.0; //delay for firing the ball in auto intake mode
 
   //off-sets for auto aim (horizontal)
@@ -169,9 +158,7 @@ class Robot : public frc::TimedRobot {
   double offsetCenterTurretAimAddition;
   double offsetRightTurretAimAddition;
 
-
   //offsets for auto speed based on turret location
-
   double offsetLeftShooterSpeedAddition = 100; //offset for left-most third of turret rotation
   double offsetCenterShooterSpeedAddition = 100; //offset for center-most third of turret rotation
   double offsetRightShooterSpeedAddition = 100; //offset for right-most third of turret rotation
@@ -186,11 +173,8 @@ class Robot : public frc::TimedRobot {
   enum yRegion{yClose, yMid, yFar, yOutOfBounds};
 
   //ColorSensorV3
-
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
-
   rev::ColorSensorV3 m_colorSensor{i2cPort}; //color sensor
-
   frc::DriverStation::Alliance AllianceColor; //which alliance are we on, red or blue
 
   enum BallColor{RedBall, BlueBall, InvalidBall}; //which color ball do we have in our intake
@@ -198,8 +182,7 @@ class Robot : public frc::TimedRobot {
   bool ballIntaken = false; // tells off of IR from color sensor
   bool CorrectBall = false; //does our currently chambered ball match our alliance color
 
-  //Limelight code 
-
+  //Limelight
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 
   double targetX; //current x offset for limelight, range approx. -30 to 30
@@ -210,10 +193,9 @@ class Robot : public frc::TimedRobot {
   bool targetYValid; //valid y range for limeligt, how close can we shoot from
   bool targetDetect; //do we see a valid target
   double turretTargetSpeed; //speed for the shooter, calculated off of x value
-  double turretAutoAimMaxSpeed; //maz speed for auto aim (horizontal)
+  double turretAutoAimMaxSpeed; //max speed for auto aim (horizontal)
 
   //limit switch code
-
   bool homingDone; //has the turret been homed
   double turretEncoderStart; // start position of the turret
 
