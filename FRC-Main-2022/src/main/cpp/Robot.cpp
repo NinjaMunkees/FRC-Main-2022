@@ -557,7 +557,7 @@ Robot::yRegion Robot::GetYRegion(){
     return yOutOfBounds;
   }
   
-
+  /*
   if(targetY >= yRegion[0]){
     return yOutOfBounds;
   }
@@ -570,6 +570,21 @@ Robot::yRegion Robot::GetYRegion(){
   else if(targetY >= yRegion[3]){
     return yFar;
   }
+  */
+
+  if(targetY >= yTable[0]){
+    return yOutOfBounds;
+  }
+  else if(targetY >= yTable[1]){
+    return yClose;
+  }
+  else if(targetY >= yTable[2]){
+    return yMid;
+  }
+  else if(targetY >= yTable[3]){
+    return yFar;
+  }
+
   return yOutOfBounds;
 
 }
