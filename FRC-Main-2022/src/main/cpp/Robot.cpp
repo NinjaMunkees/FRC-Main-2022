@@ -174,9 +174,6 @@ void Robot::RobotPeriodic()
   targetY = table->GetNumber("ty",0.0) + 25.0;
   targetYTrue = table->GetNumber("ty",0.0);
 
-  targetYValid = (targetY < yTable[0]);
-  targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
-
   frc::SmartDashboard::PutNumber("Limelight y +25", targetY);
 
 }
@@ -425,6 +422,8 @@ void Robot::TeleopPeriodic(){
     ballDelayed = false;
     break;
   case intakeFire:
+    targetYValid = (targetY > yTable[4]);
+    targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
     if(timerStarted){
       intakeTargetSpeed = intakeFeedSpeed;
       if(m_timeToo.Get().value() > intakeFireDelay){
