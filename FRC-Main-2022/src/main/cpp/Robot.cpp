@@ -228,7 +228,7 @@ void Robot::AutonomousPeriodic(){
     if(m_turretlimitSwitch.Get()){
       m_turretMotor.Set(0);
       homingDone = true;
-      m_turretEncoder.SetPosition(0);     
+      m_turretEncoder.SetPosition(0);
       homingState = homingOff;
     }
     else{
@@ -250,6 +250,9 @@ void Robot::TeleopInit(){
 }
   
 void Robot::TeleopPeriodic(){
+
+  GetYRegion();
+
   //Turret Code
 
   double LeftTrigger = buttonBoard.GetRawButton(3);
@@ -423,7 +426,7 @@ void Robot::TeleopPeriodic(){
     break;
   case intakeFire:
     //targetYValid = (targetY > yTable[4]);
-    GetYRegion();
+    //GetYRegion();
 
     targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
     if(timerStarted){
@@ -579,7 +582,7 @@ double Robot::GetShooterOffset(){
     break;
   }
 }
-void Robot::Climber(){ 
+void Robot::Climber(){
   // Climber winch code
 
   if(buttonBoard.GetRawButton(1)){
