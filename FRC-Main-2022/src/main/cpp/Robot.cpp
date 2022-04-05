@@ -422,7 +422,9 @@ void Robot::TeleopPeriodic(){
     ballDelayed = false;
     break;
   case intakeFire:
-    targetYValid = (targetY > yTable[4]);
+    //targetYValid = (targetY > yTable[4]);
+    GetYRegion();
+
     targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
     if(timerStarted){
       intakeTargetSpeed = intakeFeedSpeed;
@@ -496,27 +498,33 @@ Robot::yRegion Robot::GetYRegion(){
 
   if(!targetDetect)
   {
+    targetYValid = false;
     return notDetected;
   }
 
   if(targetY >= yTable[0]){
     frc::SmartDashboard::PutString("Y Region", "yTooClose");
+    targetYValid = true;
     return yTooClose;
   }
   else if(targetY >= yTable[1]){
     frc::SmartDashboard::PutString("Y Region", "yClose");
+    targetYValid = true;
     return yClose;
   }
   else if(targetY >= yTable[2]){
     frc::SmartDashboard::PutString("Y Region", "yMid");
+    targetYValid = true;
     return yMid;
   }
   else if(targetY >= yTable[3]){
-    frc::SmartDashboard::PutString("Y Region", "yRegio");
+    frc::SmartDashboard::PutString("Y Region", "yFar");
+    targetYValid = true;
     return yFar;
   }
   else if(targetY < yTable[3]){
     frc::SmartDashboard::PutString("Y Region", "yTooFar");
+    targetYValid = false;
     return yTooFar;
   }
 }
