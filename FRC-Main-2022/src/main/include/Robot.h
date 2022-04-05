@@ -108,12 +108,12 @@ class Robot : public frc::TimedRobot {
   bool autoDriven; //has auto been run, this is a requirement to home in auto
 
   //Shooter & Intake
-  int shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
-  int shooterMidSpeed = 2000; //used when no auto adjusting speed
-  int shooterFastSpeed = 22000; //currently un-used
-  const int shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
-  const int shooterAutonomousSpeed = 5600; //probably wrong number
-  const int shooterSlowSpeed = 5300; //currently un-used
+  double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
+  double shooterMidSpeed = 2000; //used when no auto adjusting speed
+  double shooterFastSpeed = 22000; //currently un-used
+  const double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
+  const double shooterAutonomousSpeed = 5600; //probably wrong number
+  const double shooterSlowSpeed = 5300; //currently un-used
   double intakeBackup; //controls how much to backup the intake in auto-intake mode
   float intakeTargetSpeed = -0.8; //current intake speed
   const float intakeFastSpeed = -0.8; //speed for intake
@@ -126,22 +126,27 @@ class Robot : public frc::TimedRobot {
   bool ballDelayed = false; //has the ball been backed up and chabered
   frc::Timer m_tim3r; //used in auto-intake, and intake-fire, specifically for backing up the intake to chamber a ball
   
+  double turretOffset;
+
   //speeds for shooter motors, changes based on other variables
   int shooterLeftOutput;
   int shooterRightOutput;
 
   //y ranges, and speed
-  float yTable[4] = {28.3, 19.7, 16.09, 12.48}; 
-  int speedTable[3][3] = {{4600, 4600 , 4600},
-                          {5300, 5300 ,5300},
-                        {11000, 11000 , 11000}};
+  float yTable[4] = {28.3, 19.7, 16.09, 12.48};
+  double speedTable[4][3] = {{2000, 2000, 2000},
+                             {4600, 4600, 4600},
+                             {5300, 5300, 5300},
+                            {11000, 11000, 11000}};
+  double shooterOffsetTable[4][3] = {{0, 0, 0},
+                                     {0, 0, 0},
+                                     {0, 0, 0},
+                                     {0, 0, 0}};
   
   float autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
 
   int shooterLowGoal = 3500; //ideal speed for low goal
   int shooterAutoSpeedCurrent; //current speed for auto aim based on x and y values
-  float targetMinY = 7.0; //minimum limelight y value for auto shooting
-  float targetMaxY = 29.0; //maximum limelight y value for auto shooting
   float targetMaxX = 5.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
   bool readyToShoot = false; // done intaking and ready to shoot
   enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
@@ -167,10 +172,9 @@ class Robot : public frc::TimedRobot {
 
   //shooter regions
   enum shooterRegion{shooterLeft, shooterCenter, shooterRight}; //which third of the turrets range of motion are we currently in
-  shooterRegion shooterRegion;//^
 
   //y Regions
-  enum yRegion{yClose, yMid, yFar, yOutOfBounds};
+  enum yRegion{yTooClose, yClose, yMid, yFar, yTooFar, notDetected};
 
   //ColorSensorV3
   static constexpr auto i2cPort = frc::I2C::Port::kOnboard;
@@ -205,5 +209,7 @@ class Robot : public frc::TimedRobot {
   void Climber();
   void Intake();
   yRegion GetYRegion();
-
+  shooterRegion GetShooterRegion();
+  double GetShooterSpeed();
+  double GetShooterOffset();
 };

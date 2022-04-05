@@ -109,33 +109,9 @@ void Robot::RobotPeriodic()
   //outputs ^ to driver-station
   frc::SmartDashboard::PutBoolean("Correct Color Ball", CorrectBall);
 
-  //shooter regions
-  if(m_turretEncoder.GetPosition() > -4.25){
-    shooterRegion = shooterRight;
-  }
-  else if(m_turretEncoder.GetPosition() < -4.25 && m_turretEncoder.GetPosition() > -8.5){
-    shooterRegion = shooterCenter;
-  }
-  else{
-    shooterRegion = shooterLeft;
-  }
-
   //Encoders
   frc::SmartDashboard::PutNumber("Turret Encoder Position", m_turretEncoder.GetPosition());
   frc::SmartDashboard::PutNumber("Climber Encoder Position", m_climberEncoder.GetPosition());
-
-      switch (shooterRegion)
-  {
-    case shooterLeft:
-          frc::SmartDashboard::PutString("shooterRegion", "Left");
-          break;
-    case shooterCenter:
-          frc::SmartDashboard::PutString("shooterRegion", "Center");
-          break;
-    case shooterRight:
-          frc::SmartDashboard::PutString("shooterRegion", "Right");
-          break;
-  }
 
   frc::SmartDashboard::PutNumber("off set left third addition", offsetLeftShooterSpeedAddition);
   frc::SmartDashboard::PutNumber("off set center third addition", offsetCenterShooterSpeedAddition);
@@ -188,7 +164,6 @@ void Robot::RobotPeriodic()
     break;
   }
 
-  frc::SmartDashboard::PutNumber("y Off-set addition", yOffsetAutoAim);
   frc::SmartDashboard::PutNumber("shooterAutoSpeedCurrent", shooterAutoSpeedCurrent);
 
   shooterMidSpeed = frc::SmartDashboard::GetNumber("shooterMidSpeed", shooterMidSpeed);
@@ -199,7 +174,7 @@ void Robot::RobotPeriodic()
   targetY = table->GetNumber("ty",0.0) + 25.0;
   targetYTrue = table->GetNumber("ty",0.0);
 
-  targetYValid = (targetY > targetMinY && targetY < targetMaxY);
+  targetYValid = (targetY < yTable[0]);
   targetXValid = (targetX > -targetMaxX && targetX < targetMaxX);
 
   frc::SmartDashboard::PutNumber("Limelight y +25", targetY);
@@ -280,14 +255,14 @@ void Robot::TeleopInit(){
 void Robot::TeleopPeriodic(){
   //Turret Code
 
-  double LeftTrigger = buttonBoard.GetRawButton(4);
+  double LeftTrigger = buttonBoard.GetRawButton(3);
   double RightTrigger = buttonBoard.GetRawButton(8);
 
   double TurretSpeed = -1 * TriggerSpeed * LeftTrigger + RightTrigger * TriggerSpeed; // makes sure if you try to turn the turret both left and right, it will cancel out and stop
 
   turretPosition = m_turretEncoder.GetPosition();
 
-  if(homingDone == true && buttonBoard.GetRawButtonPressed(3)){
+  if(homingDone == true && buttonBoard.GetRawButtonPressed(4)){
     if(readyToShoot == false){
       homingState = automatic;
       intakeMode = autoIntake;
@@ -305,7 +280,7 @@ void Robot::TeleopPeriodic(){
     }
   }
   
-  if(buttonBoard.GetRawButtonPressed(4) || buttonBoard.GetRawButtonPressed(8) || buttonBoard.GetRawButtonPressed(11)){
+  if(buttonBoard.GetRawButtonPressed(3) || buttonBoard.GetRawButtonPressed(8) || buttonBoard.GetRawButtonPressed(11)){
     if(homingDone){
       homingState = homingOff;
     }
@@ -318,6 +293,8 @@ void Robot::TeleopPeriodic(){
   {
   case automatic:
 
+  shooterMidSpeed = frc::SmartDashboard::GetNumber("shooterMidSpeed", shooterMidSpeed);
+
     if(turretTargetSpeed <= -0.12){
       turretTargetSpeed = -0.12;
     }
@@ -325,33 +302,9 @@ void Robot::TeleopPeriodic(){
       turretTargetSpeed = 0.12;
     }
 
-    targetYMaxInverted = (targetYTrue - 25) * -1;
+    turretOffset = frc::SmartDashboard::GetNumber("Turret Offset", 0);
 
-    if(targetY <= 14){
-      yOffsetAutoAim = targetYMaxInverted * 120.0;
-    }
-    else{
-      0;
-    }
-
-    //turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
-    switch (shooterRegion)
-    {
-    case shooterRight:
-      turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
-      offsetAdditionY = offsetRightShooterSpeedAddition;
-      break;
-    case shooterCenter:
-      turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
-      offsetAdditionY = offsetCenterShooterSpeedAddition;
-      break;
-    case shooterLeft:
-      turretTargetSpeed = TriggerSpeed * (targetX / 19.0);
-      offsetAdditionY = offsetLeftShooterSpeedAddition;
-      break;
-    default:
-      break;
-    }
+    turretTargetSpeed = TriggerSpeed * ((targetX + turretOffset /*GetShooterOffset()*/) / 19.0);
   
     if(m_turretlimitSwitch.Get() || m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
       m_turretMotor.Set(0);
@@ -405,17 +358,17 @@ void Robot::TeleopPeriodic(){
       intakeMode = manualIntake;
       shooterMode = manualSpeed;
     }
-    else if(buttonBoard.GetRawButton(9)){
+    else if(buttonBoard.GetRawButton(2)){
       shooterTargetSpeed = shooterMidSpeed;
       shooterAlive = true;
       shooterMode = manualSpeed;
     }
 
-    if(buttonBoard.GetRawButtonPressed(10)){
+    if(buttonBoard.GetRawButtonPressed(7)){
       intakeMode = manualIntake;
       intakeTargetSpeed = intakeFeedSpeed /*intakeFastSpeed*/;
     }
-    else if(buttonBoard.GetRawButtonPressed(7)){
+    else if(buttonBoard.GetRawButtonPressed(9)){
       intakeMode = manualIntake;
       intakeTargetSpeed = intakeFastSpeed * -1.0;
     }
@@ -505,18 +458,8 @@ void Robot::TeleopPeriodic(){
     break;
   case autoSpeed:
     
-    //auto speed
-    if(targetDetect == 1.000 && targetY > targetMinY){
-      shooterAlive = true;
-      shooterAutoSpeedCurrent = (8300 - 125 + offsetAdditionY * targetY) + yOffsetAutoAim;
-      shooterTargetSpeed = shooterAutoSpeedCurrent;
-    }
-    else if(targetDetect == 1.000 && targetY > targetMaxY){
-      shooterTargetSpeed = shooterLowGoal;
-    }  
-    else{
-      shooterTargetSpeed = shooterMidSpeed;
-    }
+    shooterTargetSpeed = GetShooterSpeed();
+
     m_tim3r.Start();
     if(m_timeToo.Get().value() > intakeFireDelay){
       shooterMode = stopSpeed;
@@ -554,48 +497,89 @@ Robot::yRegion Robot::GetYRegion(){
 
   if(!targetDetect)
   {
-    return yOutOfBounds;
+    return notDetected;
   }
-  
-  /*
-  if(targetY >= yRegion[0]){
-    return yOutOfBounds;
-  }
-  else if(targetY >= yRegion[1]){
-    return yClose;
-  }
-  else if(targetY >= yRegion[2]){
-    return yMid;
-  }
-  else if(targetY >= yRegion[3]){
-    return yFar;
-  }
-  */
 
   if(targetY >= yTable[0]){
-    return yOutOfBounds;
+    frc::SmartDashboard::PutString("Y Region", "yTooClose");
+    return yTooClose;
   }
   else if(targetY >= yTable[1]){
+    frc::SmartDashboard::PutString("Y Region", "yClose");
     return yClose;
   }
   else if(targetY >= yTable[2]){
+    frc::SmartDashboard::PutString("Y Region", "yMid");
     return yMid;
   }
   else if(targetY >= yTable[3]){
+    frc::SmartDashboard::PutString("Y Region", "yRegio");
     return yFar;
   }
-
-  return yOutOfBounds;
-
+  else if(targetY < yTable[3]){
+    frc::SmartDashboard::PutString("Y Region", "yTooFar");
+    return yTooFar;
+  }
+}
+Robot::shooterRegion Robot::GetShooterRegion(){
+  //shooter regions
+  if(m_turretEncoder.GetPosition() > -4.25){
+    frc::SmartDashboard::PutString("shooterRegion", "Right");
+    return shooterRight;
+  }
+  else if(m_turretEncoder.GetPosition() < -4.25 && m_turretEncoder.GetPosition() > -8.5){
+    frc::SmartDashboard::PutString("shooterRegion", "Center");
+    return shooterCenter;
+  }
+  else{
+    frc::SmartDashboard::PutString("shooterRegion", "Left");
+    return shooterLeft;
+  }
+}
+double Robot::GetShooterSpeed(){
+  shooterRegion  shooterRegionForSpeed = GetShooterRegion();
+  yRegion yRegionForSpeed = GetYRegion();
+  
+  switch (yRegionForSpeed)
+  {
+  case yTooClose:
+  case yClose:
+  case yMid:
+  case yFar:
+  return speedTable[(int)yRegionForSpeed][(int)shooterRegionForSpeed];
+    break;
+  
+  default:
+    return shooterTargetSpeed;
+    break;
+  }
+}
+double Robot::GetShooterOffset(){
+  shooterRegion  shooterRegionForSpeed = GetShooterRegion();
+  yRegion yRegionForSpeed = GetYRegion();
+  
+  switch (yRegionForSpeed)
+  {
+  case yTooClose:
+  case yClose:
+  case yMid:
+  case yFar:
+  return shooterOffsetTable[(int)yRegionForSpeed][(int)shooterRegionForSpeed];
+    break;
+  
+  default:
+    return 0;
+    break;
+  }
 }
 void Robot::Climber(){ 
   // Climber winch code
 
   if(buttonBoard.GetRawButton(1)){
-        m_climberWinch.Set(-0.5);
+        m_climberWinch.Set(-1.0);
   }
-  else if(buttonBoard.GetRawButton(5)){
-        m_climberWinch.Set(0.5);
+  else if(buttonBoard.GetRawButton(6)){
+        m_climberWinch.Set(1.0);
   }
   else{
     m_climberWinch.Set(0.0);
