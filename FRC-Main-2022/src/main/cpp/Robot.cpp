@@ -414,6 +414,10 @@ void Robot::TeleopPeriodic(){
       m_tim3r.Stop(); //plz work
       m_tim3r.Reset();
       m_tim3r.Start();
+
+      m_timer4.Stop(); //plz work
+      m_timer4.Reset();
+      m_timer4.Start();
     }
     else if(ballIntaken == false){
       intakeTargetSpeed = intakeFastSpeed;
@@ -438,7 +442,7 @@ void Robot::TeleopPeriodic(){
         ballDelayed = false;
       }
     }
-    else if(m_tim3r.Get().value() > 1.5 && targetDetect == 1.000 && targetYValid && targetXValid){
+    else if(m_timer4.Get().value() > 1.5 && targetDetect == 1.000 && targetYValid && targetXValid){
       intakeTargetSpeed = intakeFastSpeed;
       if(!timerStarted){
         m_timeToo.Reset();
@@ -471,6 +475,14 @@ void Robot::TeleopPeriodic(){
     break;
   default:
     break;
+  }
+
+  if(targetY > yTable[3]){
+    m_timer4.Stop();
+    m_timer4.Reset();
+  }
+  else if(targetY < yTable[3]){
+    m_tim3r.Start();
   }
 
   //sets the speed based on any assignments further up

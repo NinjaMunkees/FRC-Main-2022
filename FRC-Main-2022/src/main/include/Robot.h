@@ -109,7 +109,7 @@ class Robot : public frc::TimedRobot {
 
   //Shooter & Intake
   double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
-  double shooterMidSpeed = 2000; //used when no auto adjusting speed
+  double shooterMidSpeed = 3000; //used when no auto adjusting speed
   double shooterFastSpeed = 22000; //currently un-used
   const double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
   const double shooterAutonomousSpeed = 5600; //probably wrong number
@@ -125,7 +125,8 @@ class Robot : public frc::TimedRobot {
   bool ballChambered = false; //do we have a ball in the intake, used in ayto intake mode
   bool ballDelayed = false; //has the ball been backed up and chabered
   frc::Timer m_tim3r; //used in auto-intake, and intake-fire, specifically for backing up the intake to chamber a ball
-  
+  frc::Timer m_timer4; //used for shooter delay now
+
   double turretOffset;
 
   //speeds for shooter motors, changes based on other variables
@@ -133,8 +134,8 @@ class Robot : public frc::TimedRobot {
   int shooterRightOutput;
 
   //y ranges, and speed
-  float yTable[4] = {28.3, 19.7, 16.09, 12.48};
-  double speedTable[4][3] = {{2000, 2000, 2000},
+  float yTable[4] = {35.0, 19.7, 16.09, 12.48};
+  double speedTable[4][3] = {{3500, 3500, 3500},
                              {4600, 4600, 4600},
                              {5300, 5300, 5300},
                             {11000, 11000, 11000}};
