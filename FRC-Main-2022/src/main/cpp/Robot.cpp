@@ -481,8 +481,8 @@ void Robot::TeleopPeriodic(){
     m_timer4.Stop();
     m_timer4.Reset();
   }
-  else if(targetY < yTable[3]){
-    m_tim3r.Start();
+  else{
+    m_timer4.Start();
   }
 
   //sets the speed based on any assignments further up
