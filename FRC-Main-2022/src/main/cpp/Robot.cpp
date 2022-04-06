@@ -44,6 +44,7 @@ void Robot::RobotInit()
   m_turretEncoder.SetPosition(0);
   homingState = manual;
   turretMax = -12.5;
+  turretMin = -2.0;
   homingDone = false;
 }
 
@@ -308,14 +309,11 @@ void Robot::TeleopPeriodic(){
 
     turretTargetSpeed = TriggerSpeed * ((targetX + turretOffset /*GetShooterOffset()*/) / 19.0);
   
-    if(m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
-      m_turretMotor.Set(0);
-    }
-    else if(m_turretlimitSwitch.Get()){
+    if(m_turretlimitSwitch.Get() || m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
       m_turretMotor.Set(0);
     }
     else{
-      m_turretMotor.Set(turretTickBack);
+      m_turretMotor.Set(turretTargetSpeed);
     }
 
     break;
