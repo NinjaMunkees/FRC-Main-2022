@@ -274,6 +274,8 @@ void Robot::TeleopPeriodic(){
       shooterMode = autoSpeed;
       m_tim3r.Stop();
       m_tim3r.Reset();
+      m_timer4.Stop();
+      m_timer4.Reset();
       m_timeToo.Stop();
       m_timeToo.Reset();
       timerStarted = false;
@@ -442,7 +444,7 @@ void Robot::TeleopPeriodic(){
         ballDelayed = false;
       }
     }
-    else if(m_timer4.Get().value() > 1.5 && targetDetect == 1.000 && targetYValid && targetXValid){
+    else if(m_tim3r.Get().value() > 1.5 && targetDetect == 1.000 && targetYValid && targetXValid){
       intakeTargetSpeed = intakeFastSpeed;
       if(!timerStarted){
         m_timeToo.Reset();
@@ -469,20 +471,13 @@ void Robot::TeleopPeriodic(){
     shooterTargetSpeed = GetShooterSpeed();
 
     m_tim3r.Start();
+    m_timer4.Start();
     if(m_timeToo.Get().value() > intakeFireDelay){
       shooterMode = stopSpeed;
     }
     break;
   default:
     break;
-  }
-
-  if(targetY > yTable[3]){
-    m_timer4.Stop();
-    m_timer4.Reset();
-  }
-  else{
-    m_timer4.Start();
   }
 
   //sets the speed based on any assignments further up
@@ -542,6 +537,7 @@ Robot::yRegion Robot::GetYRegion(){
     targetYValid = false;
     return yTooFar;
   }
+  frc::SmartDashboard::PutBoolean("Y Valid", targetYValid);
 }
 Robot::shooterRegion Robot::GetShooterRegion(){
   //shooter regions
@@ -588,7 +584,8 @@ double Robot::GetShooterOffset(){
   case yFar:
   return shooterOffsetTable[(int)yRegionForSpeed][(int)shooterRegionForSpeed];
     break;
-  
+  case yTooFar:
+    shooterTargetSpeed = tooFarSpeed;
   default:
     return 0;
     break;
