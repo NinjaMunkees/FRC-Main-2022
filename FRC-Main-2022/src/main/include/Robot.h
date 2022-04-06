@@ -111,6 +111,7 @@ class Robot : public frc::TimedRobot {
   double shooterTargetSpeed = 2000; //current shooter speed, changes based on other variables
   double shooterMidSpeed = 3000; //used when no auto adjusting speed
   double shooterFastSpeed = 22000; //currently un-used
+  const double shooterAutonomousSpeed = 5300; // shooter speed for autonomous
   const double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
   const double shooterAutonomousSpeed = 5600; //probably wrong number
   const double shooterSlowSpeed = 5300; //currently un-used
@@ -126,6 +127,7 @@ class Robot : public frc::TimedRobot {
   bool ballDelayed = false; //has the ball been backed up and chabered
   frc::Timer m_tim3r; //used in auto-intake, and intake-fire, specifically for backing up the intake to chamber a ball
   frc::Timer m_timer4; //used for shooter delay now
+  bool yTooFar;
 
   double turretOffset;
 
@@ -143,6 +145,8 @@ class Robot : public frc::TimedRobot {
                                      {0, 0, 0},
                                      {0, 0, 0},
                                      {0, 0, 0}};
+
+  double tooFarSpeed = 11000;
   
   float autoIntakeStopShooter = 2.0; //stops the shooter once we have shot a ball in auto intake & fire
 
@@ -199,6 +203,7 @@ class Robot : public frc::TimedRobot {
   bool targetDetect; //do we see a valid target
   double turretTargetSpeed; //speed for the shooter, calculated off of x value
   double turretAutoAimMaxSpeed; //max speed for auto aim (horizontal)
+  const float turretTickBack = 0.15; //ticks the turret back when it trips the limit switch
 
   //limit switch code
   bool homingDone; //has the turret been homed

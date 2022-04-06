@@ -199,8 +199,8 @@ void Robot::AutonomousInit(){
 void Robot::AutonomousPeriodic(){
   m_timeToo.Start();
       
-  m_ShooterRight->Set(ControlMode::Velocity, shooterMidSpeed);
-  m_ShooterLeft->Set(ControlMode::Velocity, shooterMidSpeed * -1);
+  m_ShooterRight->Set(ControlMode::Velocity, shooterAutonomousSpeed);
+  m_ShooterLeft->Set(ControlMode::Velocity, shooterAutonomousSpeed * -1);
 
   shooterLeftOutput = m_ShooterLeft->GetMotorOutputPercent();
   shooterRightOutput = m_ShooterRight->GetMotorOutputPercent();
@@ -308,11 +308,14 @@ void Robot::TeleopPeriodic(){
 
     turretTargetSpeed = TriggerSpeed * ((targetX + turretOffset /*GetShooterOffset()*/) / 19.0);
   
-    if(m_turretlimitSwitch.Get() || m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
+    if(m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
+      m_turretMotor.Set(0);
+    }
+    else if(m_turretlimitSwitch.Get()){
       m_turretMotor.Set(0);
     }
     else{
-      m_turretMotor.Set(turretTargetSpeed);
+      m_turretMotor.Set(turretTickBack);
     }
 
     break;
