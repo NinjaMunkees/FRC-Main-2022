@@ -567,7 +567,6 @@ double Robot::GetShooterSpeed(){
   case yFar:
   return speedTable[(int)yRegionForSpeed][(int)shooterRegionForSpeed];
     break;
-  
   default:
     return shooterTargetSpeed;
     break;
@@ -585,8 +584,6 @@ double Robot::GetShooterOffset(){
   case yFar:
   return shooterOffsetTable[(int)yRegionForSpeed][(int)shooterRegionForSpeed];
     break;
-  case yTooFar:
-    shooterTargetSpeed = tooFarSpeed;
   default:
     return 0;
     break;
