@@ -304,7 +304,7 @@ void Robot::TeleopPeriodic(){
     else if(turretTargetSpeed >= 0.12){
       turretTargetSpeed = 0.12;
     }
-    if(m_turretEncoder.GetPosition() > deadzoneNegative || m_turretEncoder.GetPosition() < deadzonePositive){
+    if( targetX + turretOffset > targetMaxX || targetX + turretOffset < -targetMaxX){
       deadzonePopulated = true;
     }
     else{deadzonePopulated = false;}

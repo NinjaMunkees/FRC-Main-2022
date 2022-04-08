@@ -152,7 +152,7 @@ class Robot : public frc::TimedRobot {
 
   int shooterLowGoal = 3500; //ideal speed for low goal
   int shooterAutoSpeedCurrent; //current speed for auto aim based on x and y values
-  float targetMaxX = 5.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
+  float targetMaxX = 4.0; //maximum limelight x value (+ or -) for auto shooting CHANGE LATER
   bool readyToShoot = false; // done intaking and ready to shoot
   enum intakeMode{autoIntake, manualIntake, intakeFire};  //intake one ball, user control, fire once ball has been chambered
   intakeMode intakeMode; // ^
@@ -199,6 +199,9 @@ class Robot : public frc::TimedRobot {
   double targetYTrue; //ACTUAL y offset for limelight
   double targetYMaxInverted; // - 25 * -1
   bool targetXValid; //valid x range for limelight, what zone horizontally should score
+  bool deadzonePopulated; //deadzone for aiming
+  double deadzoneNegative = -1.0;
+  double deadzonePositive = 1.0;
   bool targetYValid; //valid y range for limeligt, how close can we shoot from
   bool targetDetect; //do we see a valid target
   double turretTargetSpeed; //speed for the shooter, calculated off of x value
