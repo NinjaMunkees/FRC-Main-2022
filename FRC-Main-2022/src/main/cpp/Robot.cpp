@@ -307,7 +307,7 @@ void Robot::TeleopPeriodic(){
 
     turretOffset = frc::SmartDashboard::GetNumber("Turret Offset", 0);
 
-    if( targetX + turretOffset < targetMaxX && targetX + turretOffset > -targetMaxX){
+    if( targetX + turretOffset < deadzoneValue && targetX + deadzoneValue > -targetMaxX){
       deadzonePopulated = true;
     }
     else{deadzonePopulated = false;}
