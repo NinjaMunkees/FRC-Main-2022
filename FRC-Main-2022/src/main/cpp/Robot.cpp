@@ -304,12 +304,14 @@ void Robot::TeleopPeriodic(){
     else if(turretTargetSpeed >= 0.12){
       turretTargetSpeed = 0.12;
     }
-    if( targetX + turretOffset > targetMaxX || targetX + turretOffset < -targetMaxX){
+
+    turretOffset = frc::SmartDashboard::GetNumber("Turret Offset", 0);
+
+    if( targetX + turretOffset < targetMaxX && targetX + turretOffset > -targetMaxX){
       deadzonePopulated = true;
     }
     else{deadzonePopulated = false;}
 
-    turretOffset = frc::SmartDashboard::GetNumber("Turret Offset", 0);
 if(!deadzonePopulated){
     turretTargetSpeed = TriggerSpeed * ((targetX + turretOffset /*GetShooterOffset()*/) / 20.0);
 }
