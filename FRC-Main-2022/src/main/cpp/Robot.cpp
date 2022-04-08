@@ -315,6 +315,9 @@ void Robot::TeleopPeriodic(){
 if(!deadzonePopulated){
     turretTargetSpeed = TriggerSpeed * ((targetX + turretOffset /*GetShooterOffset()*/) / 20.0);
 }
+else{
+  turretTargetSpeed = 0;    
+}
   
     if(m_turretlimitSwitch.Get() || m_turretEncoder.GetPosition() < turretMax){ //makes sure once if the limit switch for the turret is ever tripped the encoder get sets back to 0
       m_turretMotor.Set(0);
