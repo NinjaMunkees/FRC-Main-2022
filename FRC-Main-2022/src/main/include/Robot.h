@@ -138,7 +138,7 @@ class Robot : public frc::TimedRobot {
   float yTable[4] = {30.0, 22.0, 16.09, 12.48};
   double speedTable[5][3] = {{3500, 3500, 3500},
                              {5300, 5300, 5300},
-                             {5300, 5300, 5300},
+                             {5600, 5600, 5600},
                             {11000, 11000, 11000},
                             {11000, 11000, 11000}};
   double shooterOffsetTable[4][3] = {{0, 0, 0},
