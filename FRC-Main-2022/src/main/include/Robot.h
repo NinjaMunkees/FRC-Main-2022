@@ -113,7 +113,7 @@ class Robot : public frc::TimedRobot {
   double shooterMidSpeed = 3000; //used when no auto adjusting speed
   double shooterFastSpeed = 22000; //currently un-used
   const double shooterTestSpeed = 1000; // if we want to test in the work shop, ie. auto-intake mode
-  const double shooterAutonomousSpeed = 5600; //probably wrong number
+  const double shooterAutonomousSpeed = 5300; //probably wrong number
   const double shooterSlowSpeed = 5300; //currently un-used
   double intakeBackup; //controls how much to backup the intake in auto-intake mode
   float intakeTargetSpeed = -0.8; //current intake speed
@@ -138,7 +138,7 @@ class Robot : public frc::TimedRobot {
   float yTable[4] = {30.0, 22.0, 16.09, 12.48};
   double speedTable[5][3] = {{3500, 3500, 3500},
                              {5800, 5800, 5800}, // maybe 6000
-                             {5900, 5900, 5900}, // maybe 6500
+                             {6400, 6400, 6400}, // maybe 6500
                             {11000, 11000, 11000},
                             {11000, 11000, 11000}};
   double shooterOffsetTable[4][3] = {{0, 0, -5},
